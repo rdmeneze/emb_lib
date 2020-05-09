@@ -15,8 +15,8 @@ file( GLOB_RECURSE sources_test test/*.c )
 ###############################################################################
 
 #add executable
-add_executable(list_ut ${sources})
+add_executable(main ${sources})
 
 # Just for example add some compiler flags.
-target_compile_options(list_ut PUBLIC -std=c99 -Wall -Wfloat-conversion)
-target_include_directories(list_ut PUBLIC src)
+target_compile_options(main PUBLIC -std=c99 -Wall -Wfloat-conversion -g)
+target_include_directories(main PUBLIC src)
