@@ -133,7 +133,7 @@ bool    list_will_full( list_t* list, const int size )
     
     if ( list )
     {
-        bRet = ((list->items + size ) > list->size)? true : false;
+        bRet = (((list->items*list->size_elem) + size ) >= list->size)? true : false;
     }
     
     return bRet;

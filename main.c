@@ -37,5 +37,19 @@ int main(void)
         printf( "elem[%ld] : %u\n", count, elem );
     }
 
+    list_flush(&list_uint32);
+
+    for (size_t count = 0; count < num_elem+1; count++)
+    {
+        uint32_t dwvalue = 200;
+
+        if (list_will_full( &list_uint32, sizeof(dwvalue)) == false )
+        {
+            (void)list_insert( &list_uint32, &dwvalue );
+        }
+    }
+    
+
+
     return 0;
 }
