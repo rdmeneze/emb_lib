@@ -57,11 +57,23 @@ int main(void)
     printf("queue tests\r\n");
 
     printf("push into queue\r\n");
-    queue_push( &queue_uint32, &(uint32_t){ 1000} );
-    uint32_t data;
-    queue_pop( &queue_uint32, &data );
-    printf("pop from queue %d\r\n", data);
+    assert( true == queue_push( &queue_uint32, &(uint32_t){ 1000} ));
+    assert( true == queue_push( &queue_uint32, &(uint32_t){ 2000} ));
+    assert( true == queue_push( &queue_uint32, &(uint32_t){ 3000} ));
+    assert( true == queue_push( &queue_uint32, &(uint32_t){ 4000} ));
+    assert( true == queue_push( &queue_uint32, &(uint32_t){ 5000} ));
+    assert( true == queue_push( &queue_uint32, &(uint32_t){ 6000} ));
+    assert( true == queue_push( &queue_uint32, &(uint32_t){ 7000} ));
+    assert( true == queue_push( &queue_uint32, &(uint32_t){ 8000} ));
+    assert( true == queue_push( &queue_uint32, &(uint32_t){ 9000} ));
+    assert( true == queue_push( &queue_uint32, &(uint32_t){ 10000} ));
 
+    while(false == queue_empty(&queue_uint32))
+    {
+        uint32_t data;
+        queue_pop( &queue_uint32, &data );
+        printf("pop from queue %d\r\n", data);
+    }
 
     return 0;
 }

@@ -23,12 +23,12 @@ bool queue_push(queue_t* queue, void* data)
     if (queue && data)
     {
         unsigned char* ptr = (unsigned char*)data;
+        const size_t items_max = queue->size / queue->size_elem; 
 
-        if (queue->items < queue->size / queue->size_elem)
+        if (queue->items < items_max)
         {
             memcpy((unsigned char*)queue->array+queue->tail, (unsigned char*)ptr, queue->size_elem);
             queue->tail += queue->size_elem;
-            queue->tail %= queue->size;
             queue->items++;            
 
             bRet = true;
@@ -47,7 +47,6 @@ bool queue_pop(queue_t* queue, void* data)
         if (queue->items)
         {
             queue->tail -= queue->size_elem;
-            queue->tail %= queue->size;
             queue->items--;
             memcpy( data, (unsigned char*)queue->array+queue->tail, queue->size_elem );
 

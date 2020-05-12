@@ -63,7 +63,6 @@ bool    list_insert( list_t* list, void* data )
         {
             memcpy( (unsigned char*)list->array+list->head, (unsigned char*)ptr, list->size_elem );
             list->head += list->size_elem;
-            list->head %= list->size;
             list->items++;
             
             bRet = true;
@@ -91,7 +90,6 @@ size_t list_retrieve( list_t* list, void* data, const size_t nelem )
         
         memcpy((unsigned char*)data, (unsigned char*)list->array + list->tail, szBytes2Read);
         list->tail += szBytes2Read;
-        list->tail %= list->size;
         list->items -= szItens2Read;
         
         count = szItens2Read;
@@ -108,8 +106,7 @@ bool    list_empty( list_t* list )
     if ( list )
     {
         bRet = (list->tail == list->head) ? true : false;
-    }
-        
+    }  
     return bRet;
 }
 
