@@ -1,17 +1,19 @@
 #include <list.h>
+#include <queue.h>
 #include <stdio.h>
 #include <inttypes.h>
 #include <assert.h>
 
 #define BUFFER_LEN 10
 
-uint32_t dwBuffer[BUFFER_LEN];
+uint32_t buffer_list[BUFFER_LEN];
+uint32_t buffer_queue[BUFFER_LEN];
 
 int main(void)
 {
     list_t list_uint32;
 
-    list_init( &list_uint32, dwBuffer, sizeof(dwBuffer),sizeof(dwBuffer[0]) );
+    list_init( &list_uint32, buffer_list, sizeof(buffer_list),sizeof(buffer_list[0]) );
 
     assert( list_insert(&list_uint32,&(uint32_t){ 1000}) == true );
     assert( list_insert(&list_uint32,&(uint32_t){ 2000}) == true );
@@ -49,6 +51,16 @@ int main(void)
         }
     }
     
+    queue_t queue_uint32;
+    queue_init( &queue_uint32, buffer_queue, sizeof(queue_uint32), sizeof(buffer_queue[0]));
+
+    printf("queue tests\r\n");
+
+    printf("push into queue\r\n");
+    queue_push( &queue_uint32, &(uint32_t){ 1000} );
+    uint32_t data;
+    queue_pop( &queue_uint32, &data );
+    printf("pop from queue %d\r\n", data);
 
 
     return 0;
