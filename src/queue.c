@@ -1,26 +1,35 @@
 #include "queue.h"
 #include <string.h>
 
-bool queue_init(queue_t* queue, const void* array, const size_t buffer_len, const size_t size_elem )
+bool    queue_init( queue_t* queue, const void* array, const size_t buffer_len, const size_t size_elem )
 {
-    return list_init((list_t*)queue, array, buffer_len, size_elem);
+    return list_init((list_t*)queue, array, buffer_len, size_elem );
 }
 
-size_t queue_size(queue_t* queue)
+/*****************************************************************************/
+
+size_t  queue_size( queue_t* queue )
 {
-    return list_size((list_t*)queue);
+    return list_size( (list_t*)queue );
 }
 
-size_t queue_count(queue_t* queue)
+/*****************************************************************************/
+
+size_t  queue_count( queue_t* queue )
 {
-    return list_count((list_t*)queue);
+    return list_count( (list_t*)queue );
 }
 
-bool queue_push(queue_t* queue, void* data)
+/*****************************************************************************/
+
+bool    queue_enqueue( queue_t* queue, void* data )
 {
     bool bRet = false;
 
-    if (queue && data)
+    (void)queue;
+    (void)data;
+
+    if( data && queue )
     {
         unsigned char* ptr = (unsigned char*)data;
         const size_t items_max = queue->size / queue->size_elem; 
@@ -38,41 +47,41 @@ bool queue_push(queue_t* queue, void* data)
     return bRet;
 }
 
-bool queue_pop(queue_t* queue, void* data)
+/*****************************************************************************/
+
+bool    queue_dequeue( queue_t* queue, void* data )
 {
-    bool bRet = false;
-
-    if (queue && data)
-    {
-        if (queue->items)
-        {
-            queue->tail -= queue->size_elem;
-            queue->items--;
-            memcpy( data, (unsigned char*)queue->array+queue->tail, queue->size_elem );
-
-            bRet = true;       
-        }
-    }
-
-    return bRet;
+    (void)queue;
+    (void)data;
+    return true;
 }
 
-bool queue_full(queue_t* queue)
+/*****************************************************************************/
+
+bool    queue_is_empty( queue_t* queue )
 {
-    return list_full((list_t*)queue);
+    return list_is_empty((list_t*)queue);
 }
 
-bool queue_empty(queue_t* queue)
+/*****************************************************************************/
+
+bool    queue_is_full( queue_t* queue )
 {
-    return list_empty((list_t*)queue);
+    return list_is_full((list_t*)queue);
 }
 
-bool queue_flush(queue_t* queue)
+/*****************************************************************************/
+
+bool    queue_will_full( queue_t* queue, const int size )
+{
+    return list_will_full( (list_t*)queue, size );
+}
+
+/*****************************************************************************/
+
+bool    queue_flush( queue_t* queue )
 {
     return list_flush((list_t*)queue);
 }
 
-bool queue_will_full(queue_t* queue)
-{
-    return list_will_full((list_t*)queue, queue->size_elem);
-}
+/*****************************************************************************/

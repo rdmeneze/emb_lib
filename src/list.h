@@ -72,7 +72,7 @@ size_t list_retrieve( list_t* list, void* data, const size_t nelem );
  * @returns     TRUE if the list is empty
  * @returns     FALSE if the list is not empty
  */
-bool list_empty( list_t* list );
+bool list_is_empty( list_t* list );
 
 /**
  * @brief       return if the list is full
@@ -80,7 +80,7 @@ bool list_empty( list_t* list );
  * @returns     TRUE if the list is full
  * @returns     FALSE if the list is not full
  */
-bool list_full( list_t* list );
+bool list_is_full( list_t* list );
 
 /**
  * @brief       return if the list will be full

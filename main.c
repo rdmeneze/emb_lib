@@ -1,5 +1,5 @@
 #include <list.h>
-#include <queue.h>
+#include <stack.h>
 #include <stdio.h>
 #include <inttypes.h>
 #include <assert.h>
@@ -51,27 +51,27 @@ int main(void)
         }
     }
     
-    queue_t queue_uint32;
-    queue_init( &queue_uint32, buffer_queue, sizeof(queue_uint32), sizeof(buffer_queue[0]));
+    stack_t stack_uint32;
+    stack_init( &stack_uint32, buffer_queue, sizeof(stack_uint32), sizeof(buffer_queue[0]));
 
     printf("queue tests\r\n");
 
     printf("push into queue\r\n");
-    assert( true == queue_push( &queue_uint32, &(uint32_t){ 1000} ));
-    assert( true == queue_push( &queue_uint32, &(uint32_t){ 2000} ));
-    assert( true == queue_push( &queue_uint32, &(uint32_t){ 3000} ));
-    assert( true == queue_push( &queue_uint32, &(uint32_t){ 4000} ));
-    assert( true == queue_push( &queue_uint32, &(uint32_t){ 5000} ));
-    assert( true == queue_push( &queue_uint32, &(uint32_t){ 6000} ));
-    assert( true == queue_push( &queue_uint32, &(uint32_t){ 7000} ));
-    assert( true == queue_push( &queue_uint32, &(uint32_t){ 8000} ));
-    assert( true == queue_push( &queue_uint32, &(uint32_t){ 9000} ));
-    assert( true == queue_push( &queue_uint32, &(uint32_t){ 10000} ));
+    assert( true == stack_push( &stack_uint32, &(uint32_t){ 1000} ));
+    assert( true == stack_push( &stack_uint32, &(uint32_t){ 2000} ));
+    assert( true == stack_push( &stack_uint32, &(uint32_t){ 3000} ));
+    assert( true == stack_push( &stack_uint32, &(uint32_t){ 4000} ));
+    assert( true == stack_push( &stack_uint32, &(uint32_t){ 5000} ));
+    assert( true == stack_push( &stack_uint32, &(uint32_t){ 6000} ));
+    assert( true == stack_push( &stack_uint32, &(uint32_t){ 7000} ));
+    assert( true == stack_push( &stack_uint32, &(uint32_t){ 8000} ));
+    assert( true == stack_push( &stack_uint32, &(uint32_t){ 9000} ));
+    assert( true == stack_push( &stack_uint32, &(uint32_t){ 10000} ));
 
-    while(false == queue_empty(&queue_uint32))
+    while(false == stack_is_empty(&stack_uint32))
     {
         uint32_t data;
-        queue_pop( &queue_uint32, &data );
+        stack_pop( &stack_uint32, &data );
         printf("pop from queue %d\r\n", data);
     }
 

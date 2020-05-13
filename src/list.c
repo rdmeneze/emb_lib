@@ -100,7 +100,7 @@ size_t list_retrieve( list_t* list, void* data, const size_t nelem )
 
 /******************************************************************************/
 
-bool    list_empty( list_t* list )
+bool    list_is_empty( list_t* list )
 {
     bool bRet = false;
     if ( list )
@@ -112,7 +112,7 @@ bool    list_empty( list_t* list )
 
 /******************************************************************************/
 
-bool    list_full( list_t* list )
+bool    list_is_full( list_t* list )
 {
     bool bRet = false;
     if ( list )
