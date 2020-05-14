@@ -10,5 +10,7 @@ TBD
 
 ## Libraries implemented
 
-* circular buffer
+* list
+* queue
+* stack
 
