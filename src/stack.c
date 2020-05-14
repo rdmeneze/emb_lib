@@ -6,15 +6,21 @@ bool stack_init(stack_t* stack, const void* array, const size_t buffer_len, cons
     return list_init((list_t*)stack, array, buffer_len, size_elem);
 }
 
+/*****************************************************************************/
+
 size_t stack_size(stack_t* stack)
 {
     return list_size((list_t*)stack);
 }
 
+/*****************************************************************************/
+
 size_t stack_count(stack_t* stack)
 {
     return list_count((list_t*)stack);
 }
+
+/*****************************************************************************/
 
 bool stack_push(stack_t* stack, void* data)
 {
@@ -38,6 +44,8 @@ bool stack_push(stack_t* stack, void* data)
     return bRet;
 }
 
+/*****************************************************************************/
+
 bool stack_pop(stack_t* stack, void* data)
 {
     bool bRet = false;
@@ -59,6 +67,8 @@ bool stack_pop(stack_t* stack, void* data)
     return bRet;
 }
 
+/*****************************************************************************/
+
 bool stack_peek(stack_t* stack, void* data)
 {
     bool bRet = false;
@@ -77,22 +87,32 @@ bool stack_peek(stack_t* stack, void* data)
     return bRet;
 }
 
+/*****************************************************************************/
+
 bool stack_is_full(stack_t* stack)
 {
     return list_is_full((list_t*)stack);
 }
+
+/*****************************************************************************/
 
 bool stack_is_empty(stack_t* stack)
 {
     return list_is_empty((list_t*)stack);
 }
 
+/*****************************************************************************/
+
 bool stack_flush(stack_t* stack)
 {
     return list_flush((list_t*)stack);
 }
 
+/*****************************************************************************/
+
 bool stack_will_full(stack_t* stack)
 {
     return list_will_full((list_t*)stack, stack->size_elem);
 }
+
+/*****************************************************************************/

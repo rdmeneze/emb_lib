@@ -33,7 +33,7 @@ size_t list_size(list_t* list)
     size_t ret = 0;
     if ( list )
     {
-        ret = list->size;
+        ret = list->size/list->size_elem;
     }
     return ret;
 }
@@ -90,7 +90,7 @@ size_t list_retrieve( list_t* list, void* data, const size_t nelem )
         
         memcpy((unsigned char*)data, (unsigned char*)list->array + list->tail, szBytes2Read);
         list->tail += szBytes2Read;
-        list->items -= szItens2Read;
+        list->items--;
         
         count = szItens2Read;
     }
@@ -105,7 +105,7 @@ bool    list_is_empty( list_t* list )
     bool bRet = false;
     if ( list )
     {
-        bRet = (list->tail == list->head) ? true : false;
+        bRet = (list->items == 0);
     }  
     return bRet;
 }

@@ -12,7 +12,7 @@
 #include <stddef.h>
 
 //! @struct list_t
-struct list_t
+typedef struct _list_t
 {
     void*   	array;      //!< array pointer elements
     int   		items;      //!< total items
@@ -20,11 +20,7 @@ struct list_t
     int   		head;       //!< head element of the list
     int   		tail;       //!< tail element of the list
     uint8_t		size_elem;  //!< size of each element
-};
-
-//! @typedef list_t
-typedef struct list_t list_t;
-
+}list_t;
 
 /**
  * @brief   initialize the list

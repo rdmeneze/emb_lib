@@ -7,7 +7,7 @@ project( list_ut )
 ## file globbing 
 ###############################################################################
 
-file( GLOB_RECURSE sources src/*.c src/*.h main.c)
+file( GLOB_RECURSE sources src/*.c src/*.h)
 file( GLOB_RECURSE sources_test test/*.c )
 
 ###############################################################################
@@ -15,7 +15,7 @@ file( GLOB_RECURSE sources_test test/*.c )
 ###############################################################################
 
 #add executable
-add_executable(main ${sources})
+add_executable(main ${sources} ${sources_test})
 
 # Just for example add some compiler flags.
 target_compile_options(main PUBLIC -std=c99 -Wall -Wfloat-conversion -g)

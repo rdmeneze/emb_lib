@@ -26,9 +26,6 @@ bool    queue_enqueue( queue_t* queue, void* data )
 {
     bool bRet = false;
 
-    (void)queue;
-    (void)data;
-
     if( data && queue )
     {
         unsigned char* ptr = (unsigned char*)data;
@@ -38,6 +35,7 @@ bool    queue_enqueue( queue_t* queue, void* data )
         {
             memcpy((unsigned char*)queue->array+queue->tail, (unsigned char*)ptr, queue->size_elem);
             queue->tail += queue->size_elem;
+            queue->tail %= queue->size;
             queue->items++;            
 
             bRet = true;
@@ -51,9 +49,24 @@ bool    queue_enqueue( queue_t* queue, void* data )
 
 bool    queue_dequeue( queue_t* queue, void* data )
 {
-    (void)queue;
-    (void)data;
-    return true;
+    bool bRet = false;
+
+    if( data && queue )
+    {
+        unsigned char* ptr = (unsigned char*)data;
+
+        if (queue->items)
+        {
+            memcpy((unsigned char*)ptr, (unsigned char*)queue->array+queue->head, queue->size_elem);
+            queue->head += queue->size_elem;
+            queue->head %= queue->size;
+            queue->items--;            
+
+            bRet = true;
+        }
+    }
+
+    return bRet;
 }
 
 /*****************************************************************************/
