@@ -40,7 +40,7 @@ int main(void)
         printf( "elem[%ld] : %u\n", count, data );
     }
 
-    list_flush(&list_uint32);
+    //list_flush(&list_uint32);
 
     for (size_t count = 0; count < num_elem+1; count++)
     {

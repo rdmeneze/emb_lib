@@ -56,7 +56,7 @@ bool stack_pop(stack_t* stack, void* data)
         {
             stack->tail -= stack->size_elem;
             stack->items--;
-            const unsigned char* ptr = stack->array + stack->tail;
+            const unsigned char* ptr = (unsigned char*)stack->array + stack->tail;
 
             memcpy( data, (unsigned char*)ptr, stack->size_elem );
 
@@ -77,9 +77,9 @@ bool stack_peek(stack_t* stack, void* data)
     {
         if (stack->items)
         {
-            const unsigned char* ptr = (stack->array + stack->tail) - stack->size_elem;
+            const unsigned char* ptr = ((unsigned char*)stack->array + stack->tail) - stack->size_elem;
 
-            memcpy( data, (unsigned char*)ptr, stack->size_elem );
+            memcpy((unsigned char*)data, (unsigned char*)ptr, stack->size_elem );
             bRet = true;
         }
     }

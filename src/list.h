@@ -15,11 +15,11 @@
 typedef struct _list_t
 {
     void*   	array;      //!< array pointer elements
-    int   		items;      //!< total items
+    size_t      items;      //!< total items
     size_t  	size;       //!< size of list array
     int   		head;       //!< head element of the list
     int   		tail;       //!< tail element of the list
-    uint8_t		size_elem;  //!< size of each element
+    size_t		size_elem;  //!< size of each element
 }list_t;
 
 /**
