@@ -1,4 +1,4 @@
-#include "list.h"
+#include "circ_buffer.h"
 #include "stack.h"
 #include "queue.h"
 #include <stdio.h>
@@ -7,48 +7,48 @@
 
 #define BUFFER_LEN 10
 
-uint32_t buffer_list[BUFFER_LEN];
+uint32_t buffer_circ_buffer[BUFFER_LEN];
 uint32_t buffer_queue[BUFFER_LEN];
 
 int main(void)
 {
     uint32_t data;
-    list_t list_uint32;
+    circ_buffer_t circ_buffer_uint32;
 
-    list_init( &list_uint32, buffer_list, sizeof(buffer_list),sizeof(buffer_list[0]) );
+    circ_buffer_init( &circ_buffer_uint32, buffer_circ_buffer, sizeof(buffer_circ_buffer),sizeof(buffer_circ_buffer[0]) );
 
-    assert( list_insert(&list_uint32,&(uint32_t){  1000 }) == true );
-    assert( list_insert(&list_uint32,&(uint32_t){  2000 }) == true );
-    assert( list_insert(&list_uint32,&(uint32_t){  3000 }) == true );
-    assert( list_insert(&list_uint32,&(uint32_t){  4000 }) == true );
-    assert( list_insert(&list_uint32,&(uint32_t){  5000 }) == true );
-    assert( list_insert(&list_uint32,&(uint32_t){  6000 }) == true );
-    assert( list_insert(&list_uint32,&(uint32_t){  7000 }) == true );
-    assert( list_insert(&list_uint32,&(uint32_t){  8000 }) == true );
-    assert( list_insert(&list_uint32,&(uint32_t){  9000 }) == true );
-    assert( list_insert(&list_uint32,&(uint32_t){ 10000 }) == true );
-    // assert( list_insert(&list_uint32,&(uint32_t){11000}) == true );
+    assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){  1000 }) == true );
+    assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){  2000 }) == true );
+    assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){  3000 }) == true );
+    assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){  4000 }) == true );
+    assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){  5000 }) == true );
+    assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){  6000 }) == true );
+    assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){  7000 }) == true );
+    assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){  8000 }) == true );
+    assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){  9000 }) == true );
+    assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){ 10000 }) == true );
+    // assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){11000}) == true );
 
-    size_t num_elem = list_count(&list_uint32);
+    size_t num_elem = circ_buffer_count(&circ_buffer_uint32);
 
     printf( "elements %ld\n", num_elem);
 
     for(size_t count = 0; count < num_elem; count++)
     {
-        list_retrieve(&list_uint32, (uint32_t*)&data, 1);
+        circ_buffer_retrieve(&circ_buffer_uint32, (uint32_t*)&data, 1);
 
         printf( "elem[%ld] : %u\n", count, data );
     }
 
-    //list_flush(&list_uint32);
+    //circ_buffer_flush(&circ_buffer_uint32);
 
     for (size_t count = 0; count < num_elem+1; count++)
     {
         uint32_t dwvalue = 200;
 
-        if (list_will_full( &list_uint32, sizeof(dwvalue)) == false )
+        if (circ_buffer_will_full( &circ_buffer_uint32, sizeof(dwvalue)) == false )
         {
-            (void)list_insert( &list_uint32, &dwvalue );
+            (void)circ_buffer_insert( &circ_buffer_uint32, &dwvalue );
         }
     }
     

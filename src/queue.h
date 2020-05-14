@@ -7,9 +7,9 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 
-#include "list.h"
+#include "circ_buffer.h"
 
-typedef list_t queue_t; //!< queue_t declaration
+typedef circ_buffer_t queue_t; //!< queue_t declaration
 
 /**
  *  @brief          initialize the queue

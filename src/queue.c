@@ -3,21 +3,21 @@
 
 bool    queue_init( queue_t* queue, const void* array, const size_t buffer_len, const size_t size_elem )
 {
-    return list_init((list_t*)queue, array, buffer_len, size_elem );
+    return circ_buffer_init((circ_buffer_t*)queue, array, buffer_len, size_elem );
 }
 
 /*****************************************************************************/
 
 size_t  queue_size( queue_t* queue )
 {
-    return list_size( (list_t*)queue );
+    return circ_buffer_size( (circ_buffer_t*)queue );
 }
 
 /*****************************************************************************/
 
 size_t  queue_count( queue_t* queue )
 {
-    return list_count( (list_t*)queue );
+    return circ_buffer_count( (circ_buffer_t*)queue );
 }
 
 /*****************************************************************************/
@@ -73,28 +73,28 @@ bool    queue_dequeue( queue_t* queue, void* data )
 
 bool    queue_is_empty( queue_t* queue )
 {
-    return list_is_empty((list_t*)queue);
+    return circ_buffer_is_empty((circ_buffer_t*)queue);
 }
 
 /*****************************************************************************/
 
 bool    queue_is_full( queue_t* queue )
 {
-    return list_is_full((list_t*)queue);
+    return circ_buffer_is_full((circ_buffer_t*)queue);
 }
 
 /*****************************************************************************/
 
 bool    queue_will_full( queue_t* queue, const int size )
 {
-    return list_will_full( (list_t*)queue, size );
+    return circ_buffer_will_full( (circ_buffer_t*)queue, size );
 }
 
 /*****************************************************************************/
 
 bool    queue_flush( queue_t* queue )
 {
-    return list_flush((list_t*)queue);
+    return circ_buffer_flush((circ_buffer_t*)queue);
 }
 
 /*****************************************************************************/

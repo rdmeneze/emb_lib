@@ -7,10 +7,10 @@
 #ifndef STACK_H
 #define	STACK_H
 
-#include "list.h"
+#include "circ_buffer.h"
 
 //! @struct stack_t
-typedef list_t stack_t;
+typedef circ_buffer_t stack_t;
 
 /**
  *  @brief          initialize the stack

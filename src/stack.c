@@ -3,21 +3,21 @@
 
 bool stack_init(stack_t* stack, const void* array, const size_t buffer_len, const size_t size_elem )
 {
-    return list_init((list_t*)stack, array, buffer_len, size_elem);
+    return circ_buffer_init((circ_buffer_t*)stack, array, buffer_len, size_elem);
 }
 
 /*****************************************************************************/
 
 size_t stack_size(stack_t* stack)
 {
-    return list_size((list_t*)stack);
+    return circ_buffer_size((circ_buffer_t*)stack);
 }
 
 /*****************************************************************************/
 
 size_t stack_count(stack_t* stack)
 {
-    return list_count((list_t*)stack);
+    return circ_buffer_count((circ_buffer_t*)stack);
 }
 
 /*****************************************************************************/
@@ -91,28 +91,28 @@ bool stack_peek(stack_t* stack, void* data)
 
 bool stack_is_full(stack_t* stack)
 {
-    return list_is_full((list_t*)stack);
+    return circ_buffer_is_full((circ_buffer_t*)stack);
 }
 
 /*****************************************************************************/
 
 bool stack_is_empty(stack_t* stack)
 {
-    return list_is_empty((list_t*)stack);
+    return circ_buffer_is_empty((circ_buffer_t*)stack);
 }
 
 /*****************************************************************************/
 
 bool stack_flush(stack_t* stack)
 {
-    return list_flush((list_t*)stack);
+    return circ_buffer_flush((circ_buffer_t*)stack);
 }
 
 /*****************************************************************************/
 
 bool stack_will_full(stack_t* stack)
 {
-    return list_will_full((list_t*)stack, stack->size_elem);
+    return circ_buffer_will_full((circ_buffer_t*)stack, stack->size_elem);
 }
 
 /*****************************************************************************/
