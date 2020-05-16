@@ -1,0 +1,3 @@
+/home/rdias/sources/emb_lib/build/CMakeFiles/rebuild_cache.dir
+/home/rdias/sources/emb_lib/build/CMakeFiles/main.dir
+/home/rdias/sources/emb_lib/build/CMakeFiles/edit_cache.dir

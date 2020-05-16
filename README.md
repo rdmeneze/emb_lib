@@ -2,8 +2,6 @@
 
 emb_lib is a small library collection with some useful implementations that we can always found at embedded system projects
 
-
-
 ## Project Status
 
 TBD
@@ -13,4 +11,3 @@ TBD
 * circular buffer
 * queue
 * stack
-
