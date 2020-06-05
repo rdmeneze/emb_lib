@@ -11,6 +11,14 @@
 uint32_t buffer_circ_buffer[BUFFER_LEN];
 uint32_t buffer_queue[BUFFER_LEN];
 
+void printhex(const uint8_t* data, const size_t len)
+{
+    for (int i = 0; i < len; i++)
+    {
+        printf( "Ox%X ", data[i] );
+    }
+}
+
 int main(void)
 {
     uint32_t data;
@@ -123,6 +131,7 @@ int main(void)
         }
     }
 
+    printf("tests with lobyte, hibyte, loword, hiword, makeword and makedword\n");
     assert( 0xAABB == MAKEWORD(0xBB, 0xAA) );
     assert( 0xAABBCCDD == MAKEDWORD( 0xCCDD, 0xAABB ) );
 
@@ -130,6 +139,65 @@ int main(void)
     assert( 0xAA    == HIBYTE( 0xAABB )     );
     assert( 0xCCDD  == LOWORD( 0xAABBCCDD ) );
     assert( 0xAABB  == HIWORD( 0xAABBCCDD ) );
-        
+
+    printf("tests memrev\n");
+    {
+        printf("test 1: \n");
+        printf("input : 0xAA, 0xBB, 0xCC, 0xDD, 0xEE\n");
+        uint8_t data[] = { 0xAA, 0xBB, 0xCC, 0xDD, 0xEE };
+        memrev( data, ARRAY_LEN(data) );
+
+        printf("output: ");
+        printhex(data, ARRAY_LEN(data));
+        printf("\n\n");
+    }
+
+    {
+        printf("test 2: \n");
+        printf("input : 0xAA, 0xBB, 0xCC, 0xDD\n");
+        uint8_t data[] = { 0xAA, 0xBB, 0xCC, 0xDD };
+        memrev( data, ARRAY_LEN(data) );
+
+        printf("output: ");
+        printhex(data, ARRAY_LEN(data));
+        printf("\n\n");
+    }
+
+    {
+        printf("test 3: \n");
+        printf("input : 0xAA\n");
+        uint8_t data[] = { 0xAA };
+        memrev( data, ARRAY_LEN(data) );
+
+        printf("output: ");
+        printhex(data, ARRAY_LEN(data));
+        printf("\n\n");
+    }
+
+    printf("tests strrev\n");
+    {
+        printf("test 1: \n");
+        printf("input : ABCDE\n");
+        char data[] = "ABCDE";
+        strrev( data );
+        printf("output: %s\n\n", data );
+    }
+
+    {
+        printf("test 2: \n");
+        printf("input : ABCD\n");
+        char data[] = "ABCD";
+        strrev( data );
+        printf("output: %s\n\n", data );
+    }
+
+    {
+        printf("test 3: \n");
+        printf("input : A\n");
+        char data[] = "A";
+        strrev( data );
+        printf("output: %s\n\n", data );
+    }
+
     return 0;
 }

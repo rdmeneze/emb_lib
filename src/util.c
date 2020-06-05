@@ -1,4 +1,5 @@
 #include "util.h"
+#include <string.h>
 
 uint8_t HIBYTE( const uint16_t b )
 {
@@ -29,3 +30,21 @@ uint32_t MAKEDWORD( const uint16_t lo, const uint16_t hi )
 {
     return ((hi << 16) | lo);
 }
+
+void memrev(uint8_t* p, const size_t len)
+{
+    for (size_t i = 0; (i < (len >> 1)) && p;i++)
+    {
+        uint8_t c = p[i];
+        p[i] = p[len-i-1];
+        p[len-i-1] = c; 
+    }
+}
+
+void strrev(char* s)
+{
+    size_t len = strlen(s);
+
+    memrev((uint8_t*)s, len);
+}
+

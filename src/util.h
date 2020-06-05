@@ -2,6 +2,10 @@
 #define _UTIL_H_
 
 #include <inttypes.h>
+#include <stddef.h>
+
+
+#define ARRAY_LEN(x) (sizeof(x)/sizeof(x[0]))
 
 /**
  *  @brief      get the MSB from the input word
@@ -46,5 +50,9 @@ uint16_t MAKEWORD( const uint8_t lo, const uint8_t hi );
  *  @return     dword build from hi and lo words
  */
 uint32_t MAKEDWORD( const uint16_t lo, const uint16_t hi );
+
+void memrev(uint8_t* p, const size_t len);
+
+void strrev(char* s);
 
 #endif
