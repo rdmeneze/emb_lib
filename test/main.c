@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <inttypes.h>
 #include <assert.h>
+#include <util.h>
 
 #define BUFFER_LEN 10
 
@@ -122,5 +123,13 @@ int main(void)
         }
     }
 
+    assert( 0xAABB == MAKEWORD(0xBB, 0xAA) );
+    assert( 0xAABBCCDD == MAKEDWORD( 0xCCDD, 0xAABB ) );
+
+    assert( 0xBB    == LOBYTE( 0xAABB )     );
+    assert( 0xAA    == HIBYTE( 0xAABB )     );
+    assert( 0xCCDD  == LOWORD( 0xAABBCCDD ) );
+    assert( 0xAABB  == HIWORD( 0xAABBCCDD ) );
+        
     return 0;
 }
