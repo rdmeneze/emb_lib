@@ -18,5 +18,5 @@ file( GLOB_RECURSE sources_test test/*.c )
 add_executable(main ${sources} ${sources_test})
 
 # Just for example add some compiler flags.
-target_compile_options(main PUBLIC -std=c11 -Wall -Wfloat-conversion -g)
+target_compile_options(main PUBLIC -Wall)
 target_include_directories(main PUBLIC src)

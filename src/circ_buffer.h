@@ -17,8 +17,8 @@ typedef struct _circ_buffer_t
     void*   	array;      //!< array pointer elements
     size_t      items;      //!< total items
     size_t  	size;       //!< size of circ_buffer array
-    int   		head;       //!< head element of the circ_buffer
-    int   		tail;       //!< tail element of the circ_buffer
+    size_t		head;       //!< head element of the circ_buffer
+    size_t		tail;       //!< tail element of the circ_buffer
     size_t		size_elem;  //!< size of each element
 }circ_buffer_t;
 
@@ -85,7 +85,7 @@ bool circ_buffer_is_full( circ_buffer_t* circ_buffer );
  * @returns     TRUE if the circ_buffer will be full
  * @returns     FALSE if the circ_buffer will be not full
  */
-bool circ_buffer_will_full( circ_buffer_t* circ_buffer, const int size );
+bool circ_buffer_will_full( circ_buffer_t* circ_buffer, const size_t size );
 
 /**
  * @brief       flush the circ_buffer

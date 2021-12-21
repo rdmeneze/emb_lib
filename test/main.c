@@ -13,7 +13,7 @@ uint32_t buffer_queue[BUFFER_LEN];
 
 void printhex(const uint8_t* data, const size_t len)
 {
-    for (int i = 0; i < len; i++)
+    for (size_t i = 0; i < len; i++)
     {
         printf( "Ox%X ", data[i] );
     }
@@ -40,13 +40,13 @@ int main(void)
 
     size_t num_elem = circ_buffer_count(&circ_buffer_uint32);
 
-    printf( "elements %ld\n", num_elem);
+    printf( "elements %d\n", (int)num_elem);
 
     for(size_t count = 0; count < num_elem; count++)
     {
         circ_buffer_retrieve(&circ_buffer_uint32, (uint32_t*)&data, 1);
 
-        printf( "elem[%ld] : %u\n", count, data );
+        printf( "elem[%d] : %u\n", (int)count, (int)data );
     }
 
     //circ_buffer_flush(&circ_buffer_uint32);
@@ -140,46 +140,46 @@ int main(void)
     assert( 0xCCDD  == LOWORD( 0xAABBCCDD ) );
     assert( 0xAABB  == HIWORD( 0xAABBCCDD ) );
 
-    printf("tests memrev\n");
-    {
-        printf("test 1: \n");
-        printf("input : 0xAA, 0xBB, 0xCC, 0xDD, 0xEE\n");
-        uint8_t data[] = { 0xAA, 0xBB, 0xCC, 0xDD, 0xEE };
-        memrev( data, ARRAY_LEN(data) );
+    //printf("tests memrev\n");
+    //{
+    //    printf("test 1: \n");
+    //    printf("input : 0xAA, 0xBB, 0xCC, 0xDD, 0xEE\n");
+    //    uint8_t data[] = { 0xAA, 0xBB, 0xCC, 0xDD, 0xEE };
+    //    memrev( data, ARRAY_LEN(data) );
 
-        printf("output: ");
-        printhex(data, ARRAY_LEN(data));
-        printf("\n\n");
-    }
+    //    printf("output: ");
+    //    printhex(data, ARRAY_LEN(data));
+    //    printf("\n\n");
+    //}
 
-    {
-        printf("test 2: \n");
-        printf("input : 0xAA, 0xBB, 0xCC, 0xDD\n");
-        uint8_t data[] = { 0xAA, 0xBB, 0xCC, 0xDD };
-        memrev( data, ARRAY_LEN(data) );
+    //{
+    //    printf("test 2: \n");
+    //    printf("input : 0xAA, 0xBB, 0xCC, 0xDD\n");
+    //    uint8_t data[] = { 0xAA, 0xBB, 0xCC, 0xDD };
+    //    memrev( data, ARRAY_LEN(data) );
 
-        printf("output: ");
-        printhex(data, ARRAY_LEN(data));
-        printf("\n\n");
-    }
+    //    printf("output: ");
+    //    printhex(data, ARRAY_LEN(data));
+    //    printf("\n\n");
+    //}
 
-    {
-        printf("test 3: \n");
-        printf("input : 0xAA\n");
-        uint8_t data[] = { 0xAA };
-        memrev( data, ARRAY_LEN(data) );
+    //{
+    //    printf("test 3: \n");
+    //    printf("input : 0xAA\n");
+    //    uint8_t data1[] = { 0xAA };
+    //    memrev( data1, ARRAY_LEN(data1) );
 
-        printf("output: ");
-        printhex(data, ARRAY_LEN(data));
-        printf("\n\n");
-    }
+    //    printf("output: ");
+    //    printhex(data1, ARRAY_LEN(data1));
+    //    printf("\n\n");
+    //}
 
-    printf("tests strrev\n");
+    /*printf("tests strrev\n");
     {
         printf("test 1: \n");
         printf("input : ABCDE\n");
         char data[] = "ABCDE";
-        strrev( data );
+        strrev( &data );
         printf("output: %s\n\n", data );
     }
 
@@ -187,7 +187,7 @@ int main(void)
         printf("test 2: \n");
         printf("input : ABCD\n");
         char data[] = "ABCD";
-        strrev( data );
+        strrev( &data );
         printf("output: %s\n\n", data );
     }
 
@@ -195,9 +195,9 @@ int main(void)
         printf("test 3: \n");
         printf("input : A\n");
         char data[] = "A";
-        strrev( data );
+        strrev( &data );
         printf("output: %s\n\n", data );
-    }
+    }*/
 
     return 0;
 }

@@ -51,17 +51,17 @@ uint16_t MAKEWORD( const uint8_t lo, const uint8_t hi );
  */
 uint32_t MAKEDWORD( const uint16_t lo, const uint16_t hi );
 
-/**
- *  @brief      reverse the memory content
- *  @param[in]  p pointer to the memory area
- *  @param[in]  len length of memory area to be reversed 
- */
-void memrev(uint8_t* p, const size_t len);
-
-/**
- *  @brief      reverse string
- *  @param[in]  s string to be reversed 
- */
-void strrev(char* s);
+///**
+// *  @brief      reverse the memory content
+// *  @param[in]  p pointer to the memory area
+// *  @param[in]  len length of memory area to be reversed 
+// */
+//void memrev(uint8_t** p, const size_t len);
+//
+///**
+// *  @brief      reverse string
+// *  @param[in]  s string to be reversed 
+// */
+//void strrev(char** s);
 
 #endif

@@ -6,20 +6,29 @@
 
 #include "circ_buffer.h"
 #include <string.h>
+#include <assert.h>
 
 /******************************************************************************/
 
 bool	circ_buffer_init(circ_buffer_t* circ_buffer, const void* array, const size_t buffer_len, const size_t size_elem )
 {
+    assert( array );
+    assert( circ_buffer );
+    assert( buffer_len );
+    assert( size_elem );
+
 	bool bRet = false;
-	if (circ_buffer)
-	{
-        circ_buffer->array     = (void*)array;
-        circ_buffer->size      = buffer_len;
-        circ_buffer->size_elem = size_elem;
-		circ_buffer->head      = 0;
-		circ_buffer->tail      = 0;
-        circ_buffer->items     = 0;
+    if (circ_buffer)
+    {
+        *(circ_buffer) = (circ_buffer_t){
+            .array = (void*)array,
+            .size = buffer_len,
+            .size_elem = size_elem,
+            .head = 0,
+            .tail = 0,
+            .items = 0,
+        };
+
 		bRet = true;
 	}
 
@@ -30,6 +39,8 @@ bool	circ_buffer_init(circ_buffer_t* circ_buffer, const void* array, const size_
 
 size_t circ_buffer_size(circ_buffer_t* circ_buffer)
 {
+    assert( circ_buffer );
+
     size_t ret = 0;
     if ( circ_buffer )
     {
@@ -42,10 +53,12 @@ size_t circ_buffer_size(circ_buffer_t* circ_buffer)
 
 size_t   circ_buffer_count( circ_buffer_t* circ_buffer )
 {
+    assert( circ_buffer );
+
     int ret = 0;
     if ( circ_buffer )
     {
-        ret = circ_buffer->items;
+        ret = (int)circ_buffer->items;
     }
     return ret;
 }
@@ -54,6 +67,9 @@ size_t   circ_buffer_count( circ_buffer_t* circ_buffer )
 
 bool    circ_buffer_insert( circ_buffer_t* circ_buffer, void* data )
 {
+    assert( circ_buffer );
+    assert( data );
+
     bool bRet = false;
     if ( circ_buffer && data )
     {
@@ -76,6 +92,10 @@ bool    circ_buffer_insert( circ_buffer_t* circ_buffer, void* data )
 
 size_t circ_buffer_retrieve( circ_buffer_t* circ_buffer, void* data, const size_t nelem )
 {
+    assert( data );
+    assert( nelem );
+    assert( circ_buffer );
+
     size_t count = 0;
     
     if ( ( NULL != circ_buffer ) && (NULL != data) && (nelem) && (circ_buffer->items))
@@ -103,6 +123,8 @@ size_t circ_buffer_retrieve( circ_buffer_t* circ_buffer, void* data, const size_
 
 bool    circ_buffer_is_empty( circ_buffer_t* circ_buffer )
 {
+    assert( circ_buffer );
+
     bool bRet = false;
     if ( circ_buffer )
     {
@@ -115,6 +137,8 @@ bool    circ_buffer_is_empty( circ_buffer_t* circ_buffer )
 
 bool    circ_buffer_is_full( circ_buffer_t* circ_buffer )
 {
+    assert( circ_buffer );
+
     bool bRet = false;
     if ( circ_buffer )
     {
@@ -125,8 +149,11 @@ bool    circ_buffer_is_full( circ_buffer_t* circ_buffer )
 
 /******************************************************************************/
 
-bool    circ_buffer_will_full( circ_buffer_t* circ_buffer, const int size )
+bool    circ_buffer_will_full( circ_buffer_t* circ_buffer, const size_t size )
 {
+    assert( circ_buffer );
+    assert( size );
+
     bool bRet = false;
     
     if ( circ_buffer )
@@ -141,6 +168,8 @@ bool    circ_buffer_will_full( circ_buffer_t* circ_buffer, const int size )
 
 bool    circ_buffer_flush( circ_buffer_t* circ_buffer )
 {
+    assert( circ_buffer );
+
     bool bRet = false;
     
     if ( circ_buffer )
