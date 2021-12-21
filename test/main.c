@@ -24,7 +24,7 @@ int main(void)
     uint32_t data;
     circ_buffer_t circ_buffer_uint32;
 
-    circ_buffer_init( &circ_buffer_uint32, buffer_circ_buffer, sizeof(buffer_circ_buffer),sizeof(buffer_circ_buffer[0]) );
+    circ_buffer_init( &circ_buffer_uint32, buffer_circ_buffer, sizeof(buffer_circ_buffer),sizeof(buffer_circ_buffer[0]));
 
     assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){  1000 }) == true );
     assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){  2000 }) == true );
@@ -36,7 +36,7 @@ int main(void)
     assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){  8000 }) == true );
     assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){  9000 }) == true );
     assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){ 10000 }) == true );
-    // assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){11000}) == true );
+    assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){ 11000 }) == false );
 
     size_t num_elem = circ_buffer_count(&circ_buffer_uint32);
 
@@ -50,16 +50,27 @@ int main(void)
     }
 
     //circ_buffer_flush(&circ_buffer_uint32);
+    printf("elements %d\n", (int)circ_buffer_count(&circ_buffer_uint32));
 
     for (size_t count = 0; count < num_elem+1; count++)
     {
-        uint32_t dwvalue = 200;
+        uint32_t dwvalue = 200 + count;
 
         if (circ_buffer_will_full( &circ_buffer_uint32, sizeof(dwvalue)) == false )
         {
             (void)circ_buffer_insert( &circ_buffer_uint32, &dwvalue );
         }
     }
+
+    printf("elements after will_full %d\n", (int)circ_buffer_count(&circ_buffer_uint32));
+
+    for (size_t count = 0; count < num_elem; count++)
+    {
+        circ_buffer_retrieve(&circ_buffer_uint32, (uint32_t*)&data, 1);
+
+        printf("elem[%d] : %u\n", (int)count, (int)data);
+    }
+
     
     stack_t stack_uint32;
     stack_init( &stack_uint32, buffer_queue, sizeof(stack_uint32), sizeof(buffer_queue[0]));

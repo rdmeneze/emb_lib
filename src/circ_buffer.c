@@ -58,7 +58,11 @@ size_t   circ_buffer_count( circ_buffer_t* circ_buffer )
     int ret = 0;
     if ( circ_buffer )
     {
-        ret = (int)circ_buffer->items;
+        if (circ_buffer->head > circ_buffer->tail)
+            ret = (circ_buffer->head - circ_buffer->tail) / circ_buffer->size_elem;
+        else
+            ret = circ_buffer->size - ((circ_buffer->tail - circ_buffer->head) / circ_buffer->size_elem) + 1;
+        //ret = (int)circ_buffer->items;
     }
     return ret;
 }
@@ -75,7 +79,7 @@ bool    circ_buffer_insert( circ_buffer_t* circ_buffer, void* data )
     {
         unsigned char* ptr = (unsigned char*)data;
 
-        if ( circ_buffer->items < circ_buffer->size / circ_buffer->size_elem )
+        if (circ_buffer_count(circ_buffer) <  circ_buffer_size(circ_buffer) )
         {
             memcpy( (unsigned char*)circ_buffer->array+circ_buffer->head, (unsigned char*)ptr, circ_buffer->size_elem );
             circ_buffer->head += circ_buffer->size_elem;
@@ -102,15 +106,17 @@ size_t circ_buffer_retrieve( circ_buffer_t* circ_buffer, void* data, const size_
     {
         size_t szItens2Read = nelem;
         
-        if ( nelem > circ_buffer->items )
+        if ( nelem > circ_buffer_count(circ_buffer) )
         {
-            szItens2Read = circ_buffer->items;
+            szItens2Read = circ_buffer_count(circ_buffer);
         }
         
         size_t szBytes2Read = szItens2Read * circ_buffer->size_elem;
         
         memcpy((unsigned char*)data, (unsigned char*)circ_buffer->array + circ_buffer->tail, szBytes2Read);
         circ_buffer->tail += szBytes2Read;
+        circ_buffer->tail %= circ_buffer->size;
+
         circ_buffer->items -= nelem;
         
         count = szItens2Read;
@@ -128,7 +134,7 @@ bool    circ_buffer_is_empty( circ_buffer_t* circ_buffer )
     bool bRet = false;
     if ( circ_buffer )
     {
-        bRet = (circ_buffer->items == 0);
+        bRet = (circ_buffer_count(circ_buffer) == 0);
     }  
     return bRet;
 }
@@ -142,7 +148,7 @@ bool    circ_buffer_is_full( circ_buffer_t* circ_buffer )
     bool bRet = false;
     if ( circ_buffer )
     {
-        bRet = (circ_buffer->items == circ_buffer->size )? true : false;
+        bRet = (circ_buffer_count(circ_buffer) == circ_buffer->size )? true : false;
     }
     return bRet;
 }
@@ -158,7 +164,7 @@ bool    circ_buffer_will_full( circ_buffer_t* circ_buffer, const size_t size )
     
     if ( circ_buffer )
     {
-        bRet = (((circ_buffer->items*circ_buffer->size_elem) + (size_t)size ) >= circ_buffer->size)? true : false;
+        bRet = (((circ_buffer_count(circ_buffer) * circ_buffer->size_elem) + (size_t)size ) > circ_buffer->size)? true : false;
     }
     
     return bRet;

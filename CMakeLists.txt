@@ -19,4 +19,5 @@ add_executable(main ${sources} ${sources_test})
 
 # Just for example add some compiler flags.
 target_compile_options(main PUBLIC -Wall)
+set(CMAKE_C_STANDARD 11)
 target_include_directories(main PUBLIC src)
