@@ -37,6 +37,8 @@ int main(void)
     assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){  9000 }) == true );
     assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){ 10000 }) == true );
     assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){ 11000 }) == false );
+    //assert( circ_buffer_insert_overwrite(&circ_buffer_uint32, &(uint32_t){ 32000 }) == true);
+
 
     size_t num_elem = circ_buffer_count(&circ_buffer_uint32);
 
@@ -73,7 +75,7 @@ int main(void)
 
     
     stack_t stack_uint32;
-    stack_init( &stack_uint32, buffer_queue, sizeof(stack_uint32), sizeof(buffer_queue[0]));
+    stack_init( &stack_uint32, buffer_queue, sizeof(buffer_queue), sizeof(buffer_queue[0]));
 
     printf("stack tests\r\n");
 

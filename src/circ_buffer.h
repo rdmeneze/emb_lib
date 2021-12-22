@@ -12,14 +12,15 @@
 #include <stddef.h>
 
 //! @struct circ_buffer_t
-typedef struct _circ_buffer_t
+typedef struct circ_buffer_t
 {
-    void*   	array;      //!< array pointer elements
+    void*       array;      //!< array pointer elements
     size_t      items;      //!< total items
     size_t  	size;       //!< size of circ_buffer array
     size_t		head;       //!< head element of the circ_buffer
     size_t		tail;       //!< tail element of the circ_buffer
     size_t		size_elem;  //!< size of each element
+    bool        isfull;
 }circ_buffer_t;
 
 /**
@@ -45,13 +46,23 @@ size_t circ_buffer_size( circ_buffer_t* circ_buffer );
 size_t circ_buffer_count( circ_buffer_t* circ_buffer );
 
 /**
- * @brief       insert a element into the circ_buffer
+ * @brief       insert a element into the circ_buffer. If the buffer is full, do nothing
  * @param[in]   circ_buffer pointer to the circ_buffer object
  * @param[in]   data pointer to data to be added to circ_buffer
  * @returns     true on success 
  * @returns     false on fail
  */
 bool circ_buffer_insert( circ_buffer_t* circ_buffer, void* data );
+
+/**
+ * @brief       insert a element into the circ_buffer. If the buffer is full, overwrite the beginning of the queue
+ * @param[in]   circ_buffer pointer to the circ_buffer object
+ * @param[in]   data pointer to data to be added to circ_buffer
+ * @returns     true on success
+ * @returns     false on fail
+ */
+bool circ_buffer_insert_overwrite(circ_buffer_t* circ_buffer, void* data);
+
 
 /**
  * @brief           get a element from the circ_buffer

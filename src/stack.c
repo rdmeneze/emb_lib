@@ -35,24 +35,7 @@ bool stack_push(stack_t* stack, void* data)
     assert(stack);
     assert(data);
 
-    bool bRet = false;
-
-    if (stack && data)
-    {
-        unsigned char* ptr = (unsigned char*)data;
-        const size_t items_max = stack_size( stack );
-
-        if (stack->items < items_max)
-        {
-            memcpy((unsigned char*)stack->array+stack->tail, (unsigned char*)ptr, stack->size_elem);
-            stack->tail += stack->size_elem;
-            stack->items++;            
-
-            bRet = true;
-        }
-    }
-
-    return bRet;
+    return circ_buffer_insert( (circ_buffer_t*)stack, data );
 }
 
 /*****************************************************************************/
@@ -66,15 +49,17 @@ bool stack_pop(stack_t* stack, void* data)
 
     if (stack && data)
     {
-        if (stack->items)
+
+        if (circ_buffer_is_empty((circ_buffer_t*)stack))
         {
-            stack->tail -= stack->size_elem;
-            stack->items--;
-            const unsigned char* ptr = (unsigned char*)stack->array + stack->tail;
+            const size_t head = stack->head - stack->size_elem;
+            const unsigned char* ptr = (unsigned char*)stack->array + head;
+            memcpy(data, (unsigned char*)ptr, stack->size_elem);
 
-            memcpy( data, (unsigned char*)ptr, stack->size_elem );
+            stack->head = head;
+            stack->isfull = false;
 
-            bRet = true;       
+            bRet = true;
         }
     }
 
@@ -92,12 +77,9 @@ bool stack_peek(stack_t* stack, void* data)
 
     if (data && stack)
     {
-        if (stack->items)
+        if (stack_pop(stack, data))
         {
-            const unsigned char* ptr = ((unsigned char*)stack->array + stack->tail) - stack->size_elem;
-
-            memcpy((unsigned char*)data, (unsigned char*)ptr, stack->size_elem );
-            bRet = true;
+            stack_push(stack, data);
         }
     }
 
