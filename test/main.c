@@ -46,7 +46,7 @@ int main(void)
 
     for(size_t count = 0; count < num_elem; count++)
     {
-        circ_buffer_retrieve(&circ_buffer_uint32, (uint32_t*)&data, 1);
+        circ_buffer_retrieve(&circ_buffer_uint32, (uint32_t*)&data);
 
         printf( "elem[%d] : %u\n", (int)count, (int)data );
     }
@@ -68,7 +68,7 @@ int main(void)
 
     for (size_t count = 0; count < num_elem; count++)
     {
-        circ_buffer_retrieve(&circ_buffer_uint32, (uint32_t*)&data, 1);
+        circ_buffer_retrieve(&circ_buffer_uint32, (uint32_t*)&data);
 
         printf("elem[%d] : %u\n", (int)count, (int)data);
     }

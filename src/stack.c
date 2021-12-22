@@ -43,17 +43,20 @@ bool stack_push(stack_t* stack, void* data)
 bool stack_pop(stack_t* stack, void* data)
 {
     assert(stack);
-    assert(data);
 
     bool bRet = false;
 
-    if (stack && data)
+    if (stack)
     {
         if (!circ_buffer_is_empty((circ_buffer_t*)stack))
         {
             const size_t head = ((stack->isfull) ? stack->size : stack->head) - stack->size_elem;
             const unsigned char* ptr = (unsigned char*)stack->array + head;
-            memcpy(data, (unsigned char*)ptr, stack->size_elem);
+
+            if (data)
+            {
+                memcpy(data, (unsigned char*)ptr, stack->size_elem);
+            }
 
             stack->head = head;
             stack->isfull = false;

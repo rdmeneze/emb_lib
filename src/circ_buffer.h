@@ -68,10 +68,9 @@ bool circ_buffer_insert_overwrite(circ_buffer_t* circ_buffer, void* data);
  * @brief           get a element from the circ_buffer
  * @param[in]       circ_buffer    pointer to the circ_buffer object
  * @param[in,out]   data    pointer to data to be retrieve from circ_buffer
- * @param[in]       nelem   number of elements to be retrieved from circ_buffer
  * @returns         number of elements retrieved from circ_buffer
  */
-size_t circ_buffer_retrieve( circ_buffer_t* circ_buffer, void* data, const size_t nelem );
+size_t circ_buffer_retrieve( circ_buffer_t* circ_buffer, void* data);
 
 /**
  * @brief       return if the circ_buffer is empty

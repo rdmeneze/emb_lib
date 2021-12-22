@@ -46,13 +46,39 @@ size_t  queue_count( queue_t* queue );
 bool    queue_enqueue( queue_t* queue, void* data );
 
 /**
+ *  @brief          put a element into the end of the queue
+ *  @param[inout]   queue pointer to the queue object
+ *  @param[in]      data pointer to the element to be saved
+ *  @returns        true on success
+ *  @returns        false on fail
+ */
+bool    queue_push(queue_t* queue, void* data);
+
+/**
  *  @brief          get a element from the top of the queue
  *  @param[inout]   queue pointer to the queue object
  *  @param[out]     data pointer to the element to be get
  *  @returns        true on success
  *  @returns        false on fail
  */
-bool    queue_dequeue( queue_t* queue, void* data );
+bool    queue_dequeue(queue_t* queue, void* data);
+
+/**
+ *  @brief          remove oldest element on the queue
+ *  @param[inout]   queue pointer to the queue object
+ *  @returns        true on success
+ *  @returns        false on fail
+ */
+bool    queue_pop(queue_t* queue);
+
+/**
+ *  @brief          get the last element on the top of queue
+ *  @param[inout]   queue pointer to the queue object
+ *  @param[out]     data pointer to the element to be get
+ *  @returns        true on success
+ *  @returns        false on fail
+ */
+bool    queue_back(queue_t* queue, void* data);
 
 /**
  *  @brief          get information about the queue is empty or not

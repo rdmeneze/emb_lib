@@ -1,4 +1,5 @@
 #include "queue.h"
+#include "stack.h"
 #include <string.h>
 #include <assert.h>
 
@@ -8,7 +9,6 @@ bool    queue_init( queue_t* queue, const void* array, const size_t buffer_len, 
     assert(array);
     assert(buffer_len);
     assert(size_elem);
-
 
     return circ_buffer_init((circ_buffer_t*)queue, array, buffer_len, size_elem );
 }
@@ -38,25 +38,17 @@ bool    queue_enqueue( queue_t* queue, void* data )
     assert(queue);
     assert(data);
 
-    bool bRet = false;
+    return circ_buffer_insert((circ_buffer_t*)queue, data);
+}
 
-    if( data && queue )
-    {
-        unsigned char* ptr = (unsigned char*)data;
-        const size_t items_max = queue->size / queue->size_elem; 
+/*****************************************************************************/
 
-        if (queue->items < items_max)
-        {
-            memcpy((unsigned char*)queue->array+queue->tail, (unsigned char*)ptr, queue->size_elem);
-            queue->tail += queue->size_elem;
-            queue->tail %= queue->size;
-            queue->items++;            
+bool    queue_push(queue_t* queue, void* data)
+{
+    assert(queue);
+    assert(data);
 
-            bRet = true;
-        }
-    }
-
-    return bRet;
+    return circ_buffer_insert((circ_buffer_t*)queue, data);
 }
 
 /*****************************************************************************/
@@ -84,6 +76,30 @@ bool    queue_dequeue( queue_t* queue, void* data )
     }
 
     return bRet;
+}
+
+/*****************************************************************************/
+
+bool queue_pop(queue_t* queue)
+{
+    assert(queue);
+
+    return stack_pop((stack_t*)queue, NULL);
+}
+
+/*****************************************************************************/
+
+bool    queue_back(queue_t* queue, void* data)
+{
+    assert(queue);
+    assert(data);
+
+    bool bret = stack_pop( (stack_t*)queue, data );
+    if (bret)
+    {
+        bret = stack_push( (circ_buffer_t*)queue, data );
+    }
+    return bret;
 }
 
 /*****************************************************************************/

@@ -139,32 +139,29 @@ bool circ_buffer_insert_overwrite(circ_buffer_t* circ_buffer, void* data)
 
 /******************************************************************************/
 
-size_t circ_buffer_retrieve( circ_buffer_t* circ_buffer, void* data, const size_t nelem )
+size_t circ_buffer_retrieve( circ_buffer_t* circ_buffer, void* data )
 {
-    assert( data );
-    assert( nelem );
     assert( circ_buffer );
 
     size_t count = 0;
     
-    if ( ( NULL != circ_buffer ) && (NULL != data) && (nelem))
+    if ( NULL != circ_buffer )
     {
-        size_t szItens2Read = nelem;
-        
-        if ( nelem > circ_buffer_count(circ_buffer) )
-        {
-            szItens2Read = circ_buffer_count(circ_buffer);
-        }
+        size_t szItens2Read = 1;
         
         size_t szBytes2Read = szItens2Read * circ_buffer->size_elem;
         
-        memcpy((unsigned char*)data, (unsigned char*)circ_buffer->array + circ_buffer->tail, szBytes2Read);
+        if (data)
+        {
+            memcpy((unsigned char*)data, (unsigned char*)circ_buffer->array + circ_buffer->tail, szBytes2Read);
+        }
+
         circ_buffer->tail += szBytes2Read;
         circ_buffer->tail %= circ_buffer->size;
 
         circ_buffer->isfull = false;
 
-        count = szItens2Read;
+        count = 1;
     }
     
     return count;
