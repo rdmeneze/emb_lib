@@ -1,10 +1,16 @@
+extern "C" {
 #include "circ_buffer.h"
 #include "stack.h"
 #include "queue.h"
 #include <stdio.h>
 #include <inttypes.h>
 #include <assert.h>
-#include <util.h>
+#include "util.h"
+}
+
+#include "gtest/gtest.h"
+#include <sstream>
+
 
 #define BUFFER_LEN 10
 
@@ -19,6 +25,13 @@ void printhex(const uint8_t* data, const size_t len)
     }
 }
 
+
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
+
+/*
 int main(void)
 {
     uint32_t data;
@@ -186,7 +199,7 @@ int main(void)
     //    printhex(data1, ARRAY_LEN(data1));
     //    printf("\n\n");
     //}
-
+*/
     /*printf("tests strrev\n");
     {
         printf("test 1: \n");
@@ -212,5 +225,5 @@ int main(void)
         printf("output: %s\n\n", data );
     }*/
 
-    return 0;
-}
+ //   return 0;
+//}

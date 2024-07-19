@@ -5,3 +5,4 @@ Makefile
 list_ut
 ./build
 main  
+/*build*/*
