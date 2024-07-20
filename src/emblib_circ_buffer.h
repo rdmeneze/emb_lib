@@ -1,27 +1,26 @@
 /** 
- *  @file   circ_buffer.h
+ *  @file   emblib_circ_buffer.h
  *  @author Rafael Dias <rdmeneze@gmail.com>
  *  @date   dez-2018
  */
 
-#ifndef CIRC_BUFFER_H
-#define	CIRC_BUFFER_H
+#ifndef __EMBLIB_CIRC_BUFFER_H__
+#define    __EMBLIB_CIRC_BUFFER_H__
 
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
 
-//! @struct circ_buffer_t
-typedef struct circ_buffer_t
-{
-    void*       array;      //!< array pointer elements
-    size_t      items;      //!< total items
-    size_t  	size;       //!< size of circ_buffer array
-    size_t		head;       //!< head element of the circ_buffer
-    size_t		tail;       //!< tail element of the circ_buffer
-    size_t		size_elem;  //!< size of each element
-    bool        isfull;
-}circ_buffer_t;
+//! @struct emblib_circ_buffer_t
+typedef struct emblib_circ_buffer_t {
+    void *array;      //!< array pointer elements
+    size_t items;      //!< total items
+    size_t size;       //!< size of circ_buffer array
+    size_t head;       //!< head element of the circ_buffer
+    size_t tail;       //!< tail element of the circ_buffer
+    size_t size_elem;  //!< size of each element
+    bool isfull;
+} emblib_circ_buffer_t;
 
 /**
  * @brief   initialize the circ_buffer
@@ -29,21 +28,22 @@ typedef struct circ_buffer_t
  * @returns  true on success 
  * @returns  false on fail
  */
-bool	circ_buffer_init( circ_buffer_t* circ_buffer, const void* array, const size_t buffer_len, const size_t size_elem );
+bool emblib_circ_buffer_init(emblib_circ_buffer_t *circ_buffer, const void *array, const size_t buffer_len,
+                             const size_t size_elem);
 
 /**
  * @brief   size of the circ_buffer
  * @param   circ_buffer pointer to the circ_buffer object
  * @return size of the circ_buffer
  */
-size_t circ_buffer_size( circ_buffer_t* circ_buffer );
+size_t emblib_circ_buffer_size(emblib_circ_buffer_t *circ_buffer);
 
 /**
  * @brief   count the elements of the circ_buffer
  * @param   circ_buffer pointer to the circ_buffer object
  * @return  elements saved on the circ_buffer
  */
-size_t circ_buffer_count( circ_buffer_t* circ_buffer );
+size_t emblib_circ_buffer_count(emblib_circ_buffer_t *circ_buffer);
 
 /**
  * @brief       insert a element into the circ_buffer. If the buffer is full, do nothing
@@ -52,7 +52,7 @@ size_t circ_buffer_count( circ_buffer_t* circ_buffer );
  * @returns     true on success 
  * @returns     false on fail
  */
-bool circ_buffer_insert( circ_buffer_t* circ_buffer, void* data );
+bool emblib_circ_buffer_insert(emblib_circ_buffer_t *circ_buffer, void *data);
 
 /**
  * @brief       insert a element into the circ_buffer. If the buffer is full, overwrite the beginning of the queue
@@ -61,7 +61,7 @@ bool circ_buffer_insert( circ_buffer_t* circ_buffer, void* data );
  * @returns     true on success
  * @returns     false on fail
  */
-bool circ_buffer_insert_overwrite(circ_buffer_t* circ_buffer, void* data);
+bool emblib_circ_buffer_insert_overwrite(emblib_circ_buffer_t *circ_buffer, void *data);
 
 
 /**
@@ -70,7 +70,7 @@ bool circ_buffer_insert_overwrite(circ_buffer_t* circ_buffer, void* data);
  * @param[in,out]   data    pointer to data to be retrieve from circ_buffer
  * @returns         number of elements retrieved from circ_buffer
  */
-size_t circ_buffer_retrieve( circ_buffer_t* circ_buffer, void* data);
+size_t emblib_circ_buffer_retrieve(emblib_circ_buffer_t *circ_buffer, void *data);
 
 /**
  * @brief       return if the circ_buffer is empty
@@ -78,7 +78,7 @@ size_t circ_buffer_retrieve( circ_buffer_t* circ_buffer, void* data);
  * @returns     TRUE if the circ_buffer is empty
  * @returns     FALSE if the circ_buffer is not empty
  */
-bool circ_buffer_is_empty( circ_buffer_t* circ_buffer );
+bool emblib_circ_buffer_is_empty(emblib_circ_buffer_t *circ_buffer);
 
 /**
  * @brief       return if the circ_buffer is full
@@ -86,7 +86,7 @@ bool circ_buffer_is_empty( circ_buffer_t* circ_buffer );
  * @returns     TRUE if the circ_buffer is full
  * @returns     FALSE if the circ_buffer is not full
  */
-bool circ_buffer_is_full( circ_buffer_t* circ_buffer );
+bool emblib_circ_buffer_is_full(emblib_circ_buffer_t *circ_buffer);
 
 /**
  * @brief       return if the circ_buffer will be full
@@ -95,7 +95,7 @@ bool circ_buffer_is_full( circ_buffer_t* circ_buffer );
  * @returns     TRUE if the circ_buffer will be full
  * @returns     FALSE if the circ_buffer will be not full
  */
-bool circ_buffer_will_full( circ_buffer_t* circ_buffer, const size_t size );
+bool emblib_circ_buffer_will_full(emblib_circ_buffer_t *circ_buffer, const size_t size);
 
 /**
  * @brief       flush the circ_buffer
@@ -103,7 +103,7 @@ bool circ_buffer_will_full( circ_buffer_t* circ_buffer, const size_t size );
  * @returns     TRUE on success
  * @returns     FALSE on fail
  */
-bool circ_buffer_flush( circ_buffer_t* circ_buffer );
+bool emblib_circ_buffer_flush(emblib_circ_buffer_t *circ_buffer);
 
-#endif	/* circ_buffer_H */
+#endif    /* EMBLIB_CIRC_BUFFER_H */
 

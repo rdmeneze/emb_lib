@@ -1,16 +1,16 @@
 /** 
- *  @file   stack.h
+ *  @file   emblib_stack.h
  *  @author Rafael Dias <rdmeneze@gmail.com>
  *  @date   may-2020
  */
 
-#ifndef STACK_H
-#define	STACK_H
+#ifndef __EMBLIB_STACK_H__
+#define    __EMBLIB_STACK_H__
 
-#include "circ_buffer.h"
+#include "emblib_circ_buffer.h"
 
-//! @struct stack_t
-typedef circ_buffer_t stack_t;
+//! @struct emblib_stack_t
+typedef emblib_circ_buffer_t emblib_stack_t;
 
 /**
  *  @brief          initialize the stack
@@ -21,21 +21,21 @@ typedef circ_buffer_t stack_t;
  *  @returns        true on success
  *  @returns        false on fail
  */
-bool stack_init(stack_t* stack, const void* array, const size_t buffer_len, const size_t size_elem );
+bool emblib_stack_init(emblib_stack_t *stack, const void *array, const size_t buffer_len, const size_t size_elem);
 
 /**
  *  @brief          return the stack size in elem_size units
  *  @param[inout]   queue pointer to the queue object
  *  @return         queue size
  */
-size_t stack_size(stack_t* stack);
+size_t emblib_stack_size(emblib_stack_t *stack);
 
 /**
  *  @brief          get the number of elements saved into the stack
  *  @param[inout]   queue pointer to the queue object
  *  @return         queue number of elements into the queue 
  */
-size_t stack_count(stack_t* stack);
+size_t emblib_stack_count(emblib_stack_t *stack);
 
 /**
  *  @brief          put a element into the end of the queue
@@ -44,7 +44,7 @@ size_t stack_count(stack_t* stack);
  *  @returns        true on success
  *  @returns        false on fail
  */
-bool stack_push(stack_t* stack, void* data);
+bool emblib_stack_push(emblib_stack_t *stack, void *data);
 
 /**
  *  @brief          get a element from the end of the queue
@@ -53,7 +53,7 @@ bool stack_push(stack_t* stack, void* data);
  *  @returns        true on success
  *  @returns        false on fail
  */
-bool stack_pop(stack_t* stack, void* data);
+bool emblib_stack_pop(emblib_stack_t *stack, void *data);
 
 /**
  *  @brief          get a element from the end of the queue, but do not remove them
@@ -62,7 +62,7 @@ bool stack_pop(stack_t* stack, void* data);
  *  @returns        true on success
  *  @returns        false on fail
  */
-bool stack_peek(stack_t* stack, void* data);
+bool emblib_stack_peek(emblib_stack_t *stack, void *data);
 
 /**
  *  @brief          get information about the queue is full or not
@@ -70,7 +70,7 @@ bool stack_peek(stack_t* stack, void* data);
  *  @returns        true on full queue
  *  @returns        false on not full queue
  */
-bool stack_is_full(stack_t* stack);
+bool emblib_stack_is_full(emblib_stack_t *stack);
 
 /**
  *  @brief          get information about the queue is empty or not
@@ -78,7 +78,7 @@ bool stack_is_full(stack_t* stack);
  *  @returns        true on empty queue
  *  @returns        false on not empty queue
  */
-bool stack_is_empty(stack_t* stack);
+bool emblib_stack_is_empty(emblib_stack_t *stack);
 
 /**
  *  @brief          clean the queue contents
@@ -86,7 +86,7 @@ bool stack_is_empty(stack_t* stack);
  *  @returns        true on success
  *  @returns        false on fail
  */
-bool stack_flush(stack_t* stack);
+bool emblib_stack_flush(emblib_stack_t *stack);
 
 /**
  *  @brief          get information about the queue will full if I want to put a new data
@@ -94,6 +94,6 @@ bool stack_flush(stack_t* stack);
  *  @returns        true when queue will be full
  *  @returns        false when queue will not be full
  */
-bool stack_will_full(stack_t* stack);
+bool emblib_stack_will_full(emblib_stack_t *stack);
 
 #endif

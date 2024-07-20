@@ -1,11 +1,11 @@
 extern "C" {
-#include "circ_buffer.h"
-#include "stack.h"
-#include "queue.h"
+#include "emblib_circ_buffer.h"
+#include "emblib_stack.h"
+#include "emblib_queue.h"
 #include <stdio.h>
 #include <inttypes.h>
 #include <assert.h>
-#include "util.h"
+#include "emblib_util.h"
 }
 
 #include "gtest/gtest.h"
@@ -25,6 +25,9 @@ void printhex(const uint8_t* data, const size_t len)
     }
 }
 
+TEST(circ_buffer_test, foo_test) {
+    ASSERT_EQ(true, true);
+}
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
@@ -35,9 +38,9 @@ int main(int argc, char **argv) {
 int main(void)
 {
     uint32_t data;
-    circ_buffer_t circ_buffer_uint32;
+    emblib_circ_buffer_t circ_buffer_uint32;
 
-    circ_buffer_init( &circ_buffer_uint32, buffer_circ_buffer, sizeof(buffer_circ_buffer),sizeof(buffer_circ_buffer[0]));
+    emblib_circ_buffer_init( &circ_buffer_uint32, buffer_circ_buffer, sizeof(buffer_circ_buffer),sizeof(buffer_circ_buffer[0]));
 
     assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){  1000 }) == true );
     assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){  2000 }) == true );
@@ -49,8 +52,8 @@ int main(void)
     assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){  8000 }) == true );
     assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){  9000 }) == true );
     assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){ 10000 }) == true );
-    assert( circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){ 11000 }) == false );
-    //assert( circ_buffer_insert_overwrite(&circ_buffer_uint32, &(uint32_t){ 32000 }) == true);
+    assert( emblib_circ_buffer_insert(&circ_buffer_uint32,&(uint32_t){ 11000 }) == false );
+    //assert( emblib_circ_buffer_insert_overwrite(&circ_buffer_uint32, &(uint32_t){ 32000 }) == true);
 
 
     size_t num_elem = circ_buffer_count(&circ_buffer_uint32);
@@ -64,31 +67,31 @@ int main(void)
         printf( "elem[%d] : %u\n", (int)count, (int)data );
     }
 
-    //circ_buffer_flush(&circ_buffer_uint32);
+    //emblib_circ_buffer_flush(&circ_buffer_uint32);
     printf("elements %d\n", (int)circ_buffer_count(&circ_buffer_uint32));
 
     for (size_t count = 0; count < num_elem+1; count++)
     {
         uint32_t dwvalue = 200 + count;
 
-        if (circ_buffer_will_full( &circ_buffer_uint32, sizeof(dwvalue)) == false )
+        if (emblib_circ_buffer_will_full( &circ_buffer_uint32, sizeof(dwvalue)) == false )
         {
             (void)circ_buffer_insert( &circ_buffer_uint32, &dwvalue );
         }
     }
 
-    printf("elements after will_full %d\n", (int)circ_buffer_count(&circ_buffer_uint32));
+    printf("elements after will_full %d\n", (int)emblib_circ_buffer_count(&circ_buffer_uint32));
 
     for (size_t count = 0; count < num_elem; count++)
     {
-        circ_buffer_retrieve(&circ_buffer_uint32, (uint32_t*)&data);
+        emblib_circ_buffer_retrieve(&circ_buffer_uint32, (uint32_t*)&data);
 
         printf("elem[%d] : %u\n", (int)count, (int)data);
     }
 
     
-    stack_t stack_uint32;
-    stack_init( &stack_uint32, buffer_queue, sizeof(buffer_queue), sizeof(buffer_queue[0]));
+    emblib_stack_t stack_uint32;
+    emblib_stack_init( &stack_uint32, buffer_queue, sizeof(buffer_queue), sizeof(buffer_queue[0]));
 
     printf("stack tests\r\n");
 
@@ -102,16 +105,16 @@ int main(void)
     assert( true == stack_push( &stack_uint32, &(uint32_t){  7000} ));
     assert( true == stack_push( &stack_uint32, &(uint32_t){  8000} ));
     assert( true == stack_push( &stack_uint32, &(uint32_t){  9000} ));
-    assert( true == stack_push( &stack_uint32, &(uint32_t){ 10000} ));
+    assert( true == emblib_stack_push( &stack_uint32, &(uint32_t){ 10000} ));
 
-    while(false == stack_is_empty(&stack_uint32))
+    while(false == emblib_stack_is_empty(&stack_uint32))
     {
-        stack_pop( &stack_uint32, &data );
+        emblib_stack_pop( &stack_uint32, &data );
         printf("pop from stack %d\r\n", data);
     }
 
-    queue_t queue_uint32;
-    queue_init( &queue_uint32, buffer_queue, sizeof(stack_uint32), sizeof(buffer_queue[0]));
+    emblib_queue_t queue_uint32;
+    emblib_queue_init( &queue_uint32, buffer_queue, sizeof(stack_uint32), sizeof(buffer_queue[0]));
 
     printf("queue tests\r\n");
 
@@ -126,7 +129,7 @@ int main(void)
     assert( true == queue_enqueue( &queue_uint32, &(uint32_t){  8000} ));
     assert( true == queue_enqueue( &queue_uint32, &(uint32_t){  9000} ));
     assert( true == queue_enqueue( &queue_uint32, &(uint32_t){ 10000} ));
-//    assert( true == queue_enqueue( &queue_uint32, &(uint32_t){ 11000} ));
+//    assert( true == emblib_queue_enqueue( &queue_uint32, &(uint32_t){ 11000} ));
 
     while(false == queue_is_empty(&queue_uint32))
     {
@@ -149,9 +152,9 @@ int main(void)
     assert( true == queue_enqueue( &queue_uint32, &(uint32_t){ 20000} ));
     assert( true == queue_enqueue( &queue_uint32, &(uint32_t){ 21000} ));
 
-    while(false == queue_is_empty(&queue_uint32))
+    while(false == emblib_queue_is_empty(&queue_uint32))
     {
-        if (queue_dequeue( &queue_uint32, &data ))
+        if (emblib_queue_dequeue( &queue_uint32, &data ))
         {
             printf("dequeue from queue %d\r\n", data);
         }

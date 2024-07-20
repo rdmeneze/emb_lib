@@ -4,5 +4,10 @@ CMakeCache.txt
 Makefile
 list_ut
 ./build
-main  
+main
 /*build*/*
+*.o
+_deps/*
+.cmake/*
+Testing/*
+lib/*
