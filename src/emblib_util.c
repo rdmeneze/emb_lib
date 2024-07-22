@@ -39,24 +39,17 @@ uint32_t MAKEDWORD(const uint16_t lo, const uint16_t hi) {
 
 /***********************************************************************/
 
-//void memrev(uint8_t** p, const size_t len)
-//{
-//    for (size_t i = 0; (i < (len >> 1)) && p;i++)
-//    {
-//        uint8_t c = p[i];
-//        p[i] = p[len-i-1];
-//        p[len-i-1] = c; 
-//    }
-//}
+uint8_t *memrev(uint8_t *p, const size_t len) {
+    if (!p) return NULL;
+
+    for (size_t i = 0; i < len / 2; i++) {
+        uint8_t c = p[i];
+        p[i] = p[len - i - 1];
+        p[len - i - 1] = c;
+    }
+    return p;
+}
 
 /***********************************************************************/
 
-//void strrev(char** s)
-//{
-//    size_t len = strlen(s);
-//
-//    memrev((uint8_t*)s, len);
-//}
-
-/***********************************************************************/
 
