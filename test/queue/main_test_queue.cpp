@@ -1,33 +1,57 @@
 extern "C" {
-#include "emblib_circ_buffer.h"
-#include "emblib_stack.h"
 #include "emblib_queue.h"
 #include <stdio.h>
 #include <inttypes.h>
-#include <assert.h>
 #include "emblib_util.h"
 }
 
 #include "gtest/gtest.h"
 #include <sstream>
 
-
-#define BUFFER_LEN 10
-
-uint32_t buffer_circ_buffer[BUFFER_LEN];
-uint32_t buffer_queue[BUFFER_LEN];
-
-void printhex(const uint8_t* data, const size_t len)
-{
-    for (size_t i = 0; i < len; i++)
-    {
-        printf( "Ox%X ", data[i] );
-    }
-}
-
 TEST(circ_buffer_test, foo_test) {
     ASSERT_EQ(true, true);
 }
+
+TEST(circ_buffer_test, queue_init_queue_null) {
+    emblib_queue_t *queue = NULL;
+    uint8_t buffer[16] = {0};
+
+    bool ret = emblib_queue_init(queue, buffer, sizeof (buffer), sizeof(uint8_t));
+    ASSERT_EQ(ret, false);
+}
+
+TEST(circ_buffer_test, queue_init_buffer_null) {
+    emblib_queue_t queue;
+
+    bool ret = emblib_queue_init(&queue, NULL, sizeof (uint8_t), sizeof(uint8_t));
+    ASSERT_EQ(ret, false);
+}
+
+TEST(circ_buffer_test, queue_init_bufferlen_size_elem_incompatible) {
+    emblib_queue_t queue;
+    uint8_t buffer[16];
+
+    bool ret = emblib_queue_init(&queue, buffer, sizeof (buffer), 3);
+    ASSERT_EQ(ret, false);
+}
+
+TEST(circ_buffer_test, queue_init_bufferlen_size_elem_compatible) {
+    emblib_queue_t queue;
+    uint8_t buffer[16];
+
+    bool ret = emblib_queue_init(&queue, buffer, sizeof (buffer), sizeof (uint8_t));
+    ASSERT_EQ(ret, true);
+}
+
+TEST(circ_buffer_test, queue_size) {
+    emblib_queue_t queue;
+    uint8_t buffer[16];
+
+    bool ret = emblib_queue_init(&queue, buffer, sizeof (buffer), sizeof (uint16_t));
+    ASSERT_EQ(ret, true);
+    ASSERT_EQ(emblib_queue_size(&queue), sizeof (buffer)/sizeof (uint16_t) );
+}
+
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
@@ -89,7 +113,7 @@ int main(void)
         printf("elem[%d] : %u\n", (int)count, (int)data);
     }
 
-    
+
     emblib_stack_t stack_uint32;
     emblib_stack_init( &stack_uint32, buffer_queue, sizeof(buffer_queue), sizeof(buffer_queue[0]));
 

@@ -4,19 +4,12 @@
 #include <assert.h>
 
 bool emblib_queue_init(emblib_queue_t *queue, const void *array, const size_t buffer_len, const size_t size_elem) {
-    assert(queue);
-    assert(array);
-    assert(buffer_len);
-    assert(size_elem);
-
     return emblib_circ_buffer_init((emblib_circ_buffer_t *) queue, array, buffer_len, size_elem);
 }
 
 /*****************************************************************************/
 
 size_t emblib_queue_size(emblib_queue_t *queue) {
-    assert(queue);
-
     return emblib_circ_buffer_size((emblib_circ_buffer_t *) queue);
 }
 
