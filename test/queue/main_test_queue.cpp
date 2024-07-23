@@ -8,11 +8,11 @@ extern "C" {
 #include "gtest/gtest.h"
 #include <sstream>
 
-TEST(circ_buffer_test, foo_test) {
+TEST(queue_test, foo_test) {
     ASSERT_EQ(true, true);
 }
 
-TEST(circ_buffer_test, queue_init_queue_null) {
+TEST(queue_test, queue_init_queue_null) {
     emblib_queue_t *queue = NULL;
     uint8_t buffer[16] = {0};
 
@@ -20,14 +20,14 @@ TEST(circ_buffer_test, queue_init_queue_null) {
     ASSERT_EQ(ret, false);
 }
 
-TEST(circ_buffer_test, queue_init_buffer_null) {
+TEST(queue_test, queue_init_buffer_null) {
     emblib_queue_t queue;
 
     bool ret = emblib_queue_init(&queue, NULL, sizeof (uint8_t), sizeof(uint8_t));
     ASSERT_EQ(ret, false);
 }
 
-TEST(circ_buffer_test, queue_init_bufferlen_size_elem_incompatible) {
+TEST(queue_test, queue_init_bufferlen_size_elem_incompatible) {
     emblib_queue_t queue;
     uint8_t buffer[16];
 
@@ -35,7 +35,7 @@ TEST(circ_buffer_test, queue_init_bufferlen_size_elem_incompatible) {
     ASSERT_EQ(ret, false);
 }
 
-TEST(circ_buffer_test, queue_init_bufferlen_size_elem_compatible) {
+TEST(queue_test, queue_init_bufferlen_size_elem_compatible) {
     emblib_queue_t queue;
     uint8_t buffer[16];
 
@@ -43,7 +43,7 @@ TEST(circ_buffer_test, queue_init_bufferlen_size_elem_compatible) {
     ASSERT_EQ(ret, true);
 }
 
-TEST(circ_buffer_test, queue_size) {
+TEST(queue_test, queue_size) {
     emblib_queue_t queue;
     uint8_t buffer[16];
 
@@ -52,6 +52,68 @@ TEST(circ_buffer_test, queue_size) {
     ASSERT_EQ(emblib_queue_size(&queue), sizeof (buffer)/sizeof (uint16_t) );
 }
 
+TEST(queue_test, queue_insert) {
+    emblib_queue_t queue;
+    uint8_t buffer[16];
+    uint16_t data = 100;
+
+    bool ret = emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(uint16_t));
+    ASSERT_TRUE(ret);
+    ASSERT_EQ(emblib_queue_size(&queue), sizeof(buffer) / sizeof(uint16_t));
+
+    ASSERT_TRUE(emblib_queue_enqueue(&queue, &data));
+    ASSERT_EQ(emblib_queue_count(&queue), 1);
+}
+
+TEST(queue_test, queue_insert_is_not_empty) {
+    emblib_queue_t queue;
+    uint8_t buffer[16];
+    uint16_t data = 100;
+
+    bool ret = emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(uint16_t));
+    ASSERT_TRUE(ret);
+    ASSERT_EQ(emblib_queue_size(&queue), sizeof(buffer) / sizeof(uint16_t));
+
+    ASSERT_TRUE(emblib_queue_enqueue(&queue, &data));
+    ASSERT_EQ(emblib_queue_count(&queue), 1);
+    ASSERT_FALSE(emblib_queue_is_empty(&queue));
+}
+
+TEST(queue_test, queue_insert_is_full) {
+    emblib_queue_t queue;
+    uint8_t buffer[4];
+    uint16_t data[sizeof(buffer) / sizeof(uint16_t)] = {100, 200};
+
+    bool ret = emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(uint16_t));
+    ASSERT_TRUE(ret);
+    ASSERT_EQ(emblib_queue_size(&queue), sizeof(buffer) / sizeof(uint16_t));
+
+    for(int i = 0; i < emblib_queue_size(&queue); i++) {
+        ASSERT_TRUE(emblib_queue_enqueue(&queue, &data[i]));
+        ASSERT_EQ(emblib_queue_count(&queue), i+1);
+        ASSERT_FALSE(emblib_queue_is_empty(&queue));
+    }
+
+    ASSERT_TRUE(emblib_queue_is_full(&queue));
+}
+
+TEST(queue_test, queue_insert_full) {
+    emblib_queue_t queue;
+    uint8_t buffer[4];
+    uint16_t data[3] = {100, 200, 300};
+
+    bool ret = emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(uint16_t));
+    ASSERT_TRUE(ret);
+    ASSERT_EQ(emblib_queue_size(&queue), sizeof(buffer) / sizeof(uint16_t));
+
+    for(int i = 0; i < 2; i++) {
+        ASSERT_TRUE(emblib_queue_enqueue(&queue, &data[i]));
+        ASSERT_EQ(emblib_queue_count(&queue), i+1);
+        ASSERT_FALSE(emblib_queue_is_empty(&queue));
+    }
+
+    ASSERT_FALSE(emblib_queue_enqueue(&queue, &data[2]));
+}
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
