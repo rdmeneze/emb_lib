@@ -1,6 +1,4 @@
 #include "emblib_queue.h"
-#include "emblib_stack.h"
-#include <string.h>
 #include <assert.h>
 
 bool emblib_queue_init(emblib_queue_t *queue, const void *array, const size_t buffer_len, const size_t size_elem) {
@@ -27,45 +25,12 @@ bool emblib_queue_enqueue(emblib_queue_t *queue, void *data) {
 
 /*****************************************************************************/
 
-bool emblib_queue_push(emblib_queue_t *queue, void *data) {
-    return emblib_circ_buffer_insert((emblib_circ_buffer_t *) queue, data);
-}
-
-/*****************************************************************************/
-
 bool emblib_queue_dequeue(emblib_queue_t *queue, void *data) {
-    bool bRet = false;
-
-    if (data && queue) {
-        unsigned char *ptr = (unsigned char *) data;
-
-        if (queue->count) {
-            memcpy((unsigned char *) ptr, (unsigned char *) queue->array + queue->head, queue->size_elem);
-            queue->head += queue->size_elem;
-            queue->head %= queue->capacity;
-            queue->count--;
-
-            bRet = true;
-        }
-    }
-
-    return bRet;
+    return emblib_circ_buffer_retrieve(queue, data);
 }
 
-/*****************************************************************************/
-
-bool emblib_queue_pop(emblib_queue_t *queue) {
-    return emblib_stack_pop((emblib_stack_t *) queue, NULL);
-}
-
-/*****************************************************************************/
-
-bool emblib_queue_back(emblib_queue_t *queue, void *data) {
-    bool bret = emblib_stack_pop((emblib_stack_t *) queue, data);
-    if (bret) {
-        bret = emblib_stack_push((emblib_circ_buffer_t *) queue, data);
-    }
-    return bret;
+bool emblib_queue_peek(emblib_queue_t *queue, void *data) {
+    return emblib_circ_buffer_peek(queue, data);
 }
 
 /*****************************************************************************/
