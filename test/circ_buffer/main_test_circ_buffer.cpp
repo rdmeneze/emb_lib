@@ -24,7 +24,6 @@ TEST_F(CircBufferTest, Initialization) {
     EXPECT_EQ(buffer.count, 0);
     EXPECT_EQ(buffer.head, 0);
     EXPECT_EQ(buffer.tail, 0);
-    EXPECT_FALSE(buffer.is_full);
 }
 
 TEST_F(CircBufferTest, Insert) {
@@ -34,7 +33,6 @@ TEST_F(CircBufferTest, Insert) {
     EXPECT_EQ(buffer.count, 1);
     EXPECT_EQ(buffer.head, 0);
     EXPECT_EQ(buffer.tail, 1);
-    EXPECT_FALSE(buffer.is_full);
 }
 
 TEST_F(CircBufferTest, InsertFull){
@@ -47,7 +45,6 @@ TEST_F(CircBufferTest, InsertFull){
     EXPECT_EQ(buffer.count, 5);
     EXPECT_EQ(buffer.head, 0);
     EXPECT_EQ(buffer.tail, 0);
-    EXPECT_TRUE(buffer.is_full);
 }
 
 TEST_F(CircBufferTest, InsertOverwrite) {
@@ -58,7 +55,6 @@ TEST_F(CircBufferTest, InsertOverwrite) {
     EXPECT_EQ(buffer.count, 5);
     EXPECT_EQ(buffer.head, 1);
     EXPECT_EQ(buffer.tail, 1);
-    EXPECT_TRUE(buffer.is_full);
 }
 
 TEST_F(CircBufferTest, Retrieve) {
@@ -70,7 +66,6 @@ TEST_F(CircBufferTest, Retrieve) {
     EXPECT_EQ(buffer.count, 0);
     EXPECT_EQ(buffer.head, 1);
     EXPECT_EQ(buffer.tail, 1);
-    EXPECT_FALSE(buffer.is_full);
 }
 
 TEST_F(CircBufferTest, Retrieve2) {
@@ -127,7 +122,6 @@ TEST_F(CircBufferTest, Peek) {
     EXPECT_EQ(buffer.count, 2);
     EXPECT_EQ(buffer.head, 0);
     EXPECT_EQ(buffer.tail, 2);
-    EXPECT_FALSE(buffer.is_full);
 }
 
 TEST_F(CircBufferTest, IsEmpty) {
@@ -162,7 +156,6 @@ TEST_F(CircBufferTest, Flush) {
     EXPECT_EQ(buffer.count, 0);
     EXPECT_EQ(buffer.head, 0);
     EXPECT_EQ(buffer.tail, 0);
-    EXPECT_FALSE(buffer.is_full);
 }
 
 int main(int argc, char **argv) {
