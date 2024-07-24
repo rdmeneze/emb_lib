@@ -40,7 +40,7 @@ TEST(queue_test, queue_init_bufferlen_size_elem_compatible) {
     uint8_t buffer[16];
 
     ASSERT_TRUE(emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(uint8_t)));
-    ASSERT_FALSE(queue.isfull);
+    ASSERT_FALSE(queue.is_full);
     ASSERT_EQ(queue.head, 0);
     ASSERT_EQ(queue.tail, 0);
     ASSERT_EQ(queue.capacity, sizeof(buffer));
@@ -55,7 +55,7 @@ TEST(queue_test, queue_flush) {
     emblib_queue_flush(&queue);
     ASSERT_EQ(queue.head, 0);
     ASSERT_EQ(queue.tail, 0);
-    ASSERT_FALSE(queue.isfull);
+    ASSERT_FALSE(queue.is_full);
     ASSERT_EQ(queue.count, 0);
 }
 
