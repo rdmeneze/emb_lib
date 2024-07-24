@@ -40,7 +40,6 @@ TEST(stack_test, stack_init_bufferlen_size_elem_compatible) {
     uint8_t buffer[16];
 
     ASSERT_TRUE(emblib_stack_init(&stack, buffer, sizeof(buffer), sizeof(uint8_t)));
-    ASSERT_FALSE(stack.is_full);
     ASSERT_EQ(stack.head, 0);
     ASSERT_EQ(stack.tail, 0);
     ASSERT_EQ(stack.capacity, sizeof(buffer));
@@ -55,7 +54,6 @@ TEST(stack_test, stack_flush) {
     emblib_stack_flush(&stack);
     ASSERT_EQ(stack.head, 0);
     ASSERT_EQ(stack.tail, 0);
-    ASSERT_FALSE(stack.is_full);
     ASSERT_EQ(stack.count, 0);
 }
 

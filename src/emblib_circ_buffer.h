@@ -19,7 +19,6 @@ typedef struct emblib_circ_buffer_t {
     size_t head;        //!< head element of the circ_buffer
     size_t tail;        //!< tail element of the circ_buffer
     size_t size_elem;   //!< capacity of each element
-    bool is_full;
 } emblib_circ_buffer_t;
 
 /**
