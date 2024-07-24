@@ -69,9 +69,9 @@ bool emblib_circ_buffer_insert_overwrite(emblib_circ_buffer_t *circ_buffer, void
  * @brief           get a element from the circ_buffer
  * @param[in]       circ_buffer    pointer to the circ_buffer object
  * @param[in,out]   data    pointer to data to be retrieve from circ_buffer
- * @returns         number of elements retrieved from circ_buffer
+ * @returns         true or false
  */
-size_t emblib_circ_buffer_retrieve(emblib_circ_buffer_t *circ_buffer, void *data);
+bool emblib_circ_buffer_retrieve(emblib_circ_buffer_t *circ_buffer, void *data);
 
 bool emblib_circ_buffer_peek(emblib_circ_buffer_t *circ_buffer, void *data);
 

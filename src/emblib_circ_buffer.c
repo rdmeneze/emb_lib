@@ -75,21 +75,20 @@ bool emblib_circ_buffer_insert_overwrite(emblib_circ_buffer_t *circ_buffer, void
     return bRet;
 }
 
-size_t emblib_circ_buffer_retrieve(emblib_circ_buffer_t *circ_buffer, void *data) {
+bool emblib_circ_buffer_retrieve(emblib_circ_buffer_t *circ_buffer, void *data) {
+    bool bRet = false;
 
-    size_t count = 0;
-
-    if (circ_buffer != NULL) {
+    if (circ_buffer) {
         if (!emblib_circ_buffer_is_empty(circ_buffer)) {
             memcpy(data, (char *) circ_buffer->array + (circ_buffer->head * circ_buffer->size_elem),
                    circ_buffer->size_elem);
             circ_buffer->head = (circ_buffer->head + 1) % emblib_circ_buffer_size(circ_buffer);
             circ_buffer->count--;
-            count = 1;
+            bRet = true;
         }
     }
 
-    return count;
+    return bRet;
 }
 
 bool emblib_circ_buffer_peek(emblib_circ_buffer_t *circ_buffer, void *data) {
@@ -121,6 +120,4 @@ void emblib_circ_buffer_flush(emblib_circ_buffer_t *circ_buffer) {
         circ_buffer->count = 0;
     }
 }
-
-/******************************************************************************/
 
