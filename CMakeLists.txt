@@ -21,6 +21,7 @@ add_subdirectory(app)
 add_subdirectory(src)
 add_subdirectory(test/queue)
 add_subdirectory(test/util)
+add_subdirectory(test/circ_buffer)
 
 message(STATUS "Including directory: ${CMAKE_SOURCE_DIR}/src")
 
