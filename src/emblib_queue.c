@@ -39,11 +39,11 @@ bool emblib_queue_dequeue(emblib_queue_t *queue, void *data) {
     if (data && queue) {
         unsigned char *ptr = (unsigned char *) data;
 
-        if (queue->items) {
+        if (queue->count) {
             memcpy((unsigned char *) ptr, (unsigned char *) queue->array + queue->head, queue->size_elem);
             queue->head += queue->size_elem;
-            queue->head %= queue->size;
-            queue->items--;
+            queue->head %= queue->capacity;
+            queue->count--;
 
             bRet = true;
         }
@@ -88,8 +88,8 @@ bool emblib_queue_will_full(emblib_queue_t *queue, const int size) {
 
 /*****************************************************************************/
 
-bool emblib_queue_flush(emblib_queue_t *queue) {
-    return emblib_circ_buffer_flush((emblib_circ_buffer_t *) queue);
+void emblib_queue_flush(emblib_queue_t *queue) {
+    emblib_circ_buffer_flush((emblib_circ_buffer_t *) queue);
 }
 
 /*****************************************************************************/

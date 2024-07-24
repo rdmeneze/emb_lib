@@ -16,16 +16,17 @@ bool emblib_circ_buffer_init(emblib_circ_buffer_t *circ_buffer, const void *arra
 
     bool bRet = false;
 
-    if ((buffer_len % size_elem == 0) && array && circ_buffer) {
+    if ( circ_buffer && array && buffer_len && size_elem && (buffer_len % size_elem == 0)) {
 
         if (circ_buffer) {
             *(circ_buffer) = (emblib_circ_buffer_t) {
                     .array      = (void *) array,
-                    .size       = buffer_len,
+                    .capacity   = buffer_len,
                     .size_elem  = size_elem,
                     .head       = 0,
                     .tail       = 0,
                     .isfull     = false,
+                    .count      = 0
             };
 
             bRet = true;
@@ -37,53 +38,34 @@ bool emblib_circ_buffer_init(emblib_circ_buffer_t *circ_buffer, const void *arra
 /******************************************************************************/
 
 size_t emblib_circ_buffer_size(emblib_circ_buffer_t *circ_buffer) {
-    size_t ret = 0;
-    if (circ_buffer) {
-        ret = circ_buffer->size / circ_buffer->size_elem;
-    }
-    return ret;
+    return (circ_buffer) ? circ_buffer->capacity / circ_buffer->size_elem : 0;
+}
+
+/******************************************************************************/
+
+size_t emblib_circ_buffer_capacity(emblib_circ_buffer_t *circ_buffer){
+    return (circ_buffer) ? circ_buffer->capacity : 0;
 }
 
 /******************************************************************************/
 
 size_t emblib_circ_buffer_count(emblib_circ_buffer_t *circ_buffer) {
-    size_t ret = 0;
-    if (circ_buffer) {
-        if (circ_buffer->isfull == false) {
-            if (circ_buffer->head >= circ_buffer->tail)
-                ret = (circ_buffer->head - circ_buffer->tail) / circ_buffer->size_elem;
-            else
-                ret = (circ_buffer->size - (circ_buffer->tail - circ_buffer->head)) / circ_buffer->size_elem;
-        } else {
-            ret = emblib_circ_buffer_size(circ_buffer);
-        }
-    }
-    return ret;
+    return (circ_buffer) ? circ_buffer->count : 0;
 }
 
 /******************************************************************************/
 
 bool emblib_circ_buffer_insert(emblib_circ_buffer_t *circ_buffer, void *data) {
     bool bRet = false;
-    if (circ_buffer && data) {
-        unsigned char *ptr = (unsigned char *) data;
+    if (circ_buffer && data && !circ_buffer->isfull) {
 
-        if (emblib_circ_buffer_count(circ_buffer) < emblib_circ_buffer_size(circ_buffer)) {
-            size_t next_head = (circ_buffer->head + circ_buffer->size_elem) % circ_buffer->size;
+        // save data into the list
+        memcpy((char *)circ_buffer->array + (circ_buffer->tail * circ_buffer->size_elem), data, circ_buffer->size_elem);
 
-            if (next_head == circ_buffer->tail) {
-                circ_buffer->isfull = true;
-            }
-
-            // save data into the list
-            memcpy((unsigned char *) circ_buffer->array + circ_buffer->head, (unsigned char *) ptr,
-                   circ_buffer->size_elem);
-
-            // update pointers
-            circ_buffer->head = next_head;
-
-            bRet = true;
-        }
+        circ_buffer->tail = (circ_buffer->tail + 1) % emblib_circ_buffer_size(circ_buffer);
+        circ_buffer->count++;
+        circ_buffer->isfull = circ_buffer->head == circ_buffer->tail;
+        bRet = true;
     }
     return bRet;
 }
@@ -94,22 +76,16 @@ bool emblib_circ_buffer_insert_overwrite(emblib_circ_buffer_t *circ_buffer, void
 
     bool bRet = false;
     if (circ_buffer && data) {
-        unsigned char *ptr = (unsigned char *) data;
+        const size_t buff_size = emblib_circ_buffer_size(circ_buffer);
+        if(circ_buffer->isfull)
+            circ_buffer->head = (circ_buffer->head + 1) % buff_size;
+        else
+            circ_buffer->count++;
 
-        circ_buffer->isfull = false;
-
-        if (emblib_circ_buffer_count(circ_buffer) < emblib_circ_buffer_size(circ_buffer)) {
-            size_t next_head = (circ_buffer->head + circ_buffer->size_elem) % circ_buffer->size;
-
-            // save data into the list
-            memcpy((unsigned char *) circ_buffer->array + circ_buffer->head, (unsigned char *) ptr,
-                   circ_buffer->size_elem);
-
-            // update pointers
-            circ_buffer->head = next_head;
-
-            bRet = true;
-        }
+        memcpy((char*)circ_buffer->array + circ_buffer->tail * circ_buffer->size_elem, data, circ_buffer->size_elem);
+        circ_buffer->tail = (circ_buffer->tail + 1) % buff_size;
+        circ_buffer->isfull = circ_buffer->head == circ_buffer->tail;
+        bRet = true;
     }
     return bRet;
 }
@@ -120,33 +96,34 @@ size_t emblib_circ_buffer_retrieve(emblib_circ_buffer_t *circ_buffer, void *data
 
     size_t count = 0;
 
-    if (NULL != circ_buffer) {
-        size_t szItens2Read = 1;
-
-        size_t szBytes2Read = szItens2Read * circ_buffer->size_elem;
-
-        if (data) {
-            memcpy((unsigned char *) data, (unsigned char *) circ_buffer->array + circ_buffer->tail, szBytes2Read);
+    if (circ_buffer != NULL) {
+        if(circ_buffer->count){
+            memcpy(data, (char*)circ_buffer->array + (circ_buffer->head * circ_buffer->size_elem ), circ_buffer->size_elem);
+            circ_buffer->head = (circ_buffer->head + 1) % emblib_circ_buffer_size(circ_buffer);
+            circ_buffer->count--;
+            circ_buffer->isfull = false;
+            count = 1;
         }
-
-        circ_buffer->tail += szBytes2Read;
-        circ_buffer->tail %= circ_buffer->size;
-
-        circ_buffer->isfull = false;
-
-        count = 1;
     }
 
     return count;
 }
 
-/******************************************************************************/
+bool emblib_circ_buffer_peek(emblib_circ_buffer_t *circ_buffer, void *data){
+    bool bRet = false;
+    if(circ_buffer && circ_buffer->count){
+        memcpy(data, circ_buffer->array + (circ_buffer->head * circ_buffer->size_elem), circ_buffer->size_elem);
+        bRet = true;
+    }
+
+    return bRet;
+}
 
 bool emblib_circ_buffer_is_empty(emblib_circ_buffer_t *circ_buffer) {
 
     bool bRet = false;
     if (circ_buffer) {
-        bRet = (emblib_circ_buffer_count(circ_buffer) == 0);
+        bRet = (circ_buffer->count == 0);
     }
     return bRet;
 }
@@ -154,8 +131,6 @@ bool emblib_circ_buffer_is_empty(emblib_circ_buffer_t *circ_buffer) {
 /******************************************************************************/
 
 bool emblib_circ_buffer_is_full(emblib_circ_buffer_t *circ_buffer) {
-    assert(circ_buffer);
-
     bool bRet = false;
     if (circ_buffer) {
         bRet = circ_buffer->isfull;
@@ -166,28 +141,17 @@ bool emblib_circ_buffer_is_full(emblib_circ_buffer_t *circ_buffer) {
 /******************************************************************************/
 
 bool emblib_circ_buffer_will_full(emblib_circ_buffer_t *circ_buffer, const size_t size) {
-    bool bRet = false;
-
-    if (circ_buffer) {
-        bRet = (((emblib_circ_buffer_count(circ_buffer) * circ_buffer->size_elem) + (size_t) size) > circ_buffer->size)
-               ? true : false;
-    }
-
-    return bRet;
+    return (circ_buffer) ? (emblib_circ_buffer_count(circ_buffer) + size)  > emblib_circ_buffer_size(circ_buffer) : false;
 }
 
 /******************************************************************************/
 
-bool emblib_circ_buffer_flush(emblib_circ_buffer_t *circ_buffer) {
-    bool bRet = false;
-
+void emblib_circ_buffer_flush(emblib_circ_buffer_t *circ_buffer) {
     if (circ_buffer) {
         circ_buffer->tail = circ_buffer->head = 0;
         circ_buffer->isfull = false;
-        bRet = true;
+        circ_buffer->count = 0;
     }
-
-    return bRet;
 }
 
 /******************************************************************************/

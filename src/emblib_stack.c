@@ -43,7 +43,7 @@ bool emblib_stack_pop(emblib_stack_t *stack, void *data) {
 
     if (stack) {
         if (!emblib_circ_buffer_is_empty((emblib_circ_buffer_t *) stack)) {
-            const size_t head = ((stack->isfull) ? stack->size : stack->head) - stack->size_elem;
+            const size_t head = ((stack->isfull) ? stack->capacity : stack->head) - stack->size_elem;
             const unsigned char *ptr = (unsigned char *) stack->array + head;
 
             if (data) {
@@ -95,10 +95,8 @@ bool emblib_stack_is_empty(emblib_stack_t *stack) {
 
 /*****************************************************************************/
 
-bool emblib_stack_flush(emblib_stack_t *stack) {
-    assert(stack);
-
-    return emblib_circ_buffer_flush((emblib_circ_buffer_t *) stack);
+void emblib_stack_flush(emblib_stack_t *stack) {
+    emblib_circ_buffer_flush((emblib_circ_buffer_t *) stack);
 }
 
 /*****************************************************************************/

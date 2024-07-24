@@ -16,23 +16,23 @@ typedef emblib_circ_buffer_t emblib_queue_t; //!< emblib_queue_t declaration
  *  @param[inout]   queue pointer to the queue object
  *  @param[in]      array pointer to array buffer
  *  @param[in]      buffer_len buffer lenght
- *  @param[in]      elem_size size of a unique element of the queue
+ *  @param[in]      elem_size capacity of a unique element of the queue
  *  @returns        true on success
  *  @returns        false on fail
  */
 bool emblib_queue_init(emblib_queue_t *queue, const void *array, const size_t buffer_len, const size_t size_elem);
 
 /**
- *  @brief          return the queue size in elem_size units
+ *  @brief          return the queue capacity in elem_size units
  *  @param[inout]   queue pointer to the queue object
- *  @return         queue size
+ *  @return         queue capacity
  */
 size_t emblib_queue_size(emblib_queue_t *queue);
 
 /**
  *  @brief          get the number of elements saved into the queue
  *  @param[inout]   queue pointer to the queue object
- *  @return         queue number of elements into the queue 
+ *  @return         queue number of elements into the queue
  */
 size_t emblib_queue_count(emblib_queue_t *queue);
 
@@ -108,8 +108,7 @@ bool emblib_queue_will_full(emblib_queue_t *queue, const int size);
  *  @brief          clean the queue contents
  *  @param[inout]   queue pointer to the queue object
  *  @returns        true on success
- *  @returns        false on fail
  */
-bool emblib_queue_flush(emblib_queue_t *queue);
+void emblib_queue_flush(emblib_queue_t *queue);
 
 #endif
