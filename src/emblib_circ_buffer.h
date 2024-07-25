@@ -18,92 +18,96 @@ typedef struct emblib_circ_buffer_t {
     size_t capacity;    //!< capacity of circ_buffer array
     size_t head;        //!< head element of the circ_buffer
     size_t tail;        //!< tail element of the circ_buffer
-    size_t size_elem;   //!< capacity of each element
+    size_t elem_size;   //!< size of each element
 } emblib_circ_buffer_t;
 
 /**
  * @brief   initialize the circ_buffer
- * @param   circ_buffer pointer to the circ_buffer object
- * @returns  true on success
- * @returns  false on fail
+ * @param[in,out]   circ_buffer pointer to the circ_buffer object
+ * @returns  true on success, false other else
  */
 bool emblib_circ_buffer_init(emblib_circ_buffer_t *circ_buffer, const void *array, const size_t buffer_len,
                              const size_t size_elem);
 
 /**
- * @brief   capacity of the circ_buffer
- * @param   circ_buffer pointer to the circ_buffer object
- * @return capacity of the circ_buffer
+ * @brief   size in elements of circ_buffer
+ * @param[in,out]   circ_buffer pointer to the circ_buffer object
+ * @return capacity of the circ_buffer in elements
  */
 size_t emblib_circ_buffer_size(emblib_circ_buffer_t *circ_buffer);
 
+/**
+ * @brief maximum buffer capacity (circular buffer maximum size in bytes)
+ * @param[in,out] circ_buffer pointer to the circ_buffer object
+ * @return circular buffer capacity
+ * */
 size_t emblib_circ_buffer_capacity(emblib_circ_buffer_t *circ_buffer);
 
 /**
- * @brief   count the elements of the circ_buffer
- * @param   circ_buffer pointer to the circ_buffer object
- * @return  elements saved on the circ_buffer
+ * @brief   read the elements of circ_buffer
+ * @param[in,out]   circ_buffer pointer to the circ_buffer object
+ * @return  elements saved into circ_buffer
  */
 size_t emblib_circ_buffer_count(emblib_circ_buffer_t *circ_buffer);
 
 /**
  * @brief       insert a element into the circ_buffer. If the buffer is full, do nothing
- * @param[in]   circ_buffer pointer to the circ_buffer object
+ * @param[in,out]   circ_buffer pointer to the circ_buffer object
  * @param[in]   data pointer to data to be added to circ_buffer
- * @returns     true on success
- * @returns     false on fail
+ * @return     true on success, false on fail
  */
 bool emblib_circ_buffer_insert(emblib_circ_buffer_t *circ_buffer, void *data);
 
 /**
  * @brief       insert a element into the circ_buffer. If the buffer is full, overwrite the beginning of the queue
- * @param[in]   circ_buffer pointer to the circ_buffer object
+ * @param[in,out]   circ_buffer pointer to the circ_buffer object
  * @param[in]   data pointer to data to be added to circ_buffer
- * @returns     true on success
- * @returns     false on fail
+ * @return     true on success, false on fail
  */
 bool emblib_circ_buffer_insert_overwrite(emblib_circ_buffer_t *circ_buffer, void *data);
 
-
 /**
  * @brief           get a element from the circ_buffer
- * @param[in]       circ_buffer    pointer to the circ_buffer object
- * @param[in,out]   data    pointer to data to be retrieve from circ_buffer
- * @returns         true or false
+ * @param[in,out]   circ_buffer    pointer to the circ_buffer object
+ * @param[out]   data    pointer to data to be retrieved from circ_buffer
+ * @return          true on success, false on fail
  */
 bool emblib_circ_buffer_retrieve(emblib_circ_buffer_t *circ_buffer, void *data);
 
+/**
+ * @brief           get a element from the circ_buffer without remove it from the buffer
+ * @param[in,out]   circ_buffer    pointer to the circ_buffer object
+ * @param[out]      data    pointer to data to be read from circ_buffer
+ * @return          true on success, false on fail
+ */
 bool emblib_circ_buffer_peek(emblib_circ_buffer_t *circ_buffer, void *data);
 
 /**
- * @brief       return if the circ_buffer is empty
- * @param[in]   circ_buffer pointer to the circ_buffer object
- * @returns     TRUE if the circ_buffer is empty
- * @returns     FALSE if the circ_buffer is not empty
+ * @brief           return if the circ_buffer is empty
+ * @param[in,out]   circ_buffer pointer to the circ_buffer object
+ * @return          true for empty, false for not empty
  */
 bool emblib_circ_buffer_is_empty(emblib_circ_buffer_t *circ_buffer);
 
 /**
- * @brief       return if the circ_buffer is full
- * @param[in]   circ_buffer pointer to the circ_buffer object
- * @returns     TRUE if the circ_buffer is full
- * @returns     FALSE if the circ_buffer is not full
+ * @brief           return if the circ_buffer is full
+ * @param[in,out]   circ_buffer pointer to the circ_buffer object
+ * @return          true for full, false for not full
  */
 bool emblib_circ_buffer_is_full(emblib_circ_buffer_t *circ_buffer);
 
 /**
- * @brief       return if the circ_buffer will be full
- * @param[in]   circ_buffer pointer to the circ_buffer object
- * @param[in]   size of data to be inserted
- * @returns     TRUE if the circ_buffer will be full
- * @returns     FALSE if the circ_buffer will be not full
+ * @brief           return if the circ_buffer will be full
+ * @param[in,out]   circ_buffer pointer to the circ_buffer object
+ * @param[in]       size of data to be inserted
+ * @return          true for will full, false for will not full
  */
 bool emblib_circ_buffer_will_full(emblib_circ_buffer_t *circ_buffer, const size_t size);
 
 /**
- * @brief       flush the circ_buffer
- * @param[in]   circ_buffer pointer to the circ_buffer object
- * @returns     TRUE on success
+ * @brief           flush the circ_buffer
+ * @param[in,out]   circ_buffer pointer to the circ_buffer object
+ * @return          true on success, false on fail
  */
 void emblib_circ_buffer_flush(emblib_circ_buffer_t *circ_buffer);
 

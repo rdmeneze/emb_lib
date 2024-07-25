@@ -19,7 +19,7 @@ bool emblib_circ_buffer_init(emblib_circ_buffer_t *circ_buffer, const void *arra
             *(circ_buffer) = (emblib_circ_buffer_t) {
                     .array      = (void *) array,
                     .capacity   = buffer_len,
-                    .size_elem  = size_elem,
+                    .elem_size  = size_elem,
                     .head       = 0,
                     .tail       = 0,
                     .count      = 0
@@ -32,7 +32,7 @@ bool emblib_circ_buffer_init(emblib_circ_buffer_t *circ_buffer, const void *arra
 }
 
 size_t emblib_circ_buffer_size(emblib_circ_buffer_t *circ_buffer) {
-    return (circ_buffer) ? circ_buffer->capacity / circ_buffer->size_elem : 0;
+    return (circ_buffer) ? circ_buffer->capacity / circ_buffer->elem_size : 0;
 }
 
 size_t emblib_circ_buffer_capacity(emblib_circ_buffer_t *circ_buffer) {
@@ -48,8 +48,8 @@ bool emblib_circ_buffer_insert(emblib_circ_buffer_t *circ_buffer, void *data) {
     if (circ_buffer && data && !emblib_circ_buffer_is_full(circ_buffer)) {
 
         // save data into the list
-        memcpy((char *) circ_buffer->array + (circ_buffer->tail * circ_buffer->size_elem), data,
-               circ_buffer->size_elem);
+        memcpy((char *) circ_buffer->array + (circ_buffer->tail * circ_buffer->elem_size), data,
+               circ_buffer->elem_size);
 
         circ_buffer->tail = (circ_buffer->tail + 1) % emblib_circ_buffer_size(circ_buffer);
         circ_buffer->count++;
@@ -68,7 +68,7 @@ bool emblib_circ_buffer_insert_overwrite(emblib_circ_buffer_t *circ_buffer, void
         else
             circ_buffer->count++;
 
-        memcpy((char *) circ_buffer->array + circ_buffer->tail * circ_buffer->size_elem, data, circ_buffer->size_elem);
+        memcpy((char *) circ_buffer->array + circ_buffer->tail * circ_buffer->elem_size, data, circ_buffer->elem_size);
         circ_buffer->tail = (circ_buffer->tail + 1) % buff_size;
         bRet = true;
     }
@@ -80,8 +80,8 @@ bool emblib_circ_buffer_retrieve(emblib_circ_buffer_t *circ_buffer, void *data) 
 
     if (circ_buffer) {
         if (!emblib_circ_buffer_is_empty(circ_buffer)) {
-            memcpy(data, (char *) circ_buffer->array + (circ_buffer->head * circ_buffer->size_elem),
-                   circ_buffer->size_elem);
+            memcpy(data, (char *) circ_buffer->array + (circ_buffer->head * circ_buffer->elem_size),
+                   circ_buffer->elem_size);
             circ_buffer->head = (circ_buffer->head + 1) % emblib_circ_buffer_size(circ_buffer);
             circ_buffer->count--;
             bRet = true;
@@ -94,7 +94,7 @@ bool emblib_circ_buffer_retrieve(emblib_circ_buffer_t *circ_buffer, void *data) 
 bool emblib_circ_buffer_peek(emblib_circ_buffer_t *circ_buffer, void *data) {
     bool bRet = false;
     if (circ_buffer && circ_buffer->count) {
-        memcpy(data, circ_buffer->array + (circ_buffer->head * circ_buffer->size_elem), circ_buffer->size_elem);
+        memcpy(data, circ_buffer->array + (circ_buffer->head * circ_buffer->elem_size), circ_buffer->elem_size);
         bRet = true;
     }
 

@@ -57,7 +57,7 @@ void emblib_stack_flush(emblib_stack_t *stack) {
 /*****************************************************************************/
 
 bool emblib_stack_will_full(emblib_stack_t *stack) {
-    return emblib_circ_buffer_will_full(stack, stack->size_elem);
+    return emblib_circ_buffer_will_full(stack, stack->elem_size);
 }
 
 /*****************************************************************************/

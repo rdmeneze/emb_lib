@@ -75,7 +75,7 @@ TEST(util_test, util_memrev_null) {
 
     auto ret = memrev(NULL, 100);
 
-    ASSERT_EQ(ret, (void*)NULL);
+    ASSERT_EQ(ret, (void *) NULL);
 }
 
 int main(int argc, char **argv) {
