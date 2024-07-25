@@ -43,7 +43,7 @@ TEST(stack_test, stack_init_bufferlen_size_elem_compatible) {
     ASSERT_EQ(stack.head, 0);
     ASSERT_EQ(stack.tail, 0);
     ASSERT_EQ(stack.capacity, sizeof(buffer));
-    ASSERT_EQ(stack.size_elem, sizeof(uint8_t));
+    ASSERT_EQ(stack.elem_size, sizeof(uint8_t));
 }
 
 TEST(stack_test, stack_flush) {

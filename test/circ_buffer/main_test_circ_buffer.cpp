@@ -14,16 +14,20 @@ protected:
     int buffer_array[5]{0};
 
     virtual void SetUp() {
-        emblib_circ_buffer_init(&buffer, buffer_array, sizeof(buffer_array), sizeof (int));
+        emblib_circ_buffer_init(&buffer, buffer_array, sizeof(buffer_array), sizeof(int));
     }
 };
 
 TEST_F(CircBufferTest, Initialization) {
     EXPECT_EQ(buffer.capacity, 20);
-    EXPECT_EQ(buffer.size_elem, sizeof(int));
+    EXPECT_EQ(buffer.elem_size, sizeof(int));
     EXPECT_EQ(buffer.count, 0);
     EXPECT_EQ(buffer.head, 0);
     EXPECT_EQ(buffer.tail, 0);
+}
+
+TEST_F(CircBufferTest, Capacity) {
+    EXPECT_EQ(emblib_circ_buffer_capacity(&buffer), 20);
 }
 
 TEST_F(CircBufferTest, Insert) {
@@ -35,10 +39,10 @@ TEST_F(CircBufferTest, Insert) {
     EXPECT_EQ(buffer.tail, 1);
 }
 
-TEST_F(CircBufferTest, InsertFull){
-    int data2Insert[]{1,2,3,4,5};
+TEST_F(CircBufferTest, InsertFull) {
+    int data2Insert[]{1, 2, 3, 4, 5};
 
-    for(auto data : data2Insert){
+    for (auto data: data2Insert) {
         EXPECT_TRUE(emblib_circ_buffer_insert(&buffer, &data));
     }
     EXPECT_FALSE(emblib_circ_buffer_insert(&buffer, &data2Insert[0]));
@@ -48,8 +52,8 @@ TEST_F(CircBufferTest, InsertFull){
 }
 
 TEST_F(CircBufferTest, InsertOverwrite) {
-    int data2Insert[]{1,2,3,4,5,6};
-    for (auto data : data2Insert) {
+    int data2Insert[]{1, 2, 3, 4, 5, 6};
+    for (auto data: data2Insert) {
         EXPECT_TRUE(emblib_circ_buffer_insert_overwrite(&buffer, &data));
     }
     EXPECT_EQ(buffer.count, 5);
@@ -69,12 +73,12 @@ TEST_F(CircBufferTest, Retrieve) {
 }
 
 TEST_F(CircBufferTest, Retrieve2) {
-    int data2Insert[]{10,20,30,40,50};
-    for(auto data: data2Insert){
+    int data2Insert[]{10, 20, 30, 40, 50};
+    for (auto data: data2Insert) {
         emblib_circ_buffer_insert(&buffer, &data);
     }
 
-    for(int i = 0; i < emblib_queue_size(&buffer); i++){
+    for (int i = 0; i < emblib_queue_size(&buffer); i++) {
         int retrieved_data;
         EXPECT_TRUE(emblib_circ_buffer_retrieve(&buffer, &retrieved_data));
         EXPECT_EQ(retrieved_data, data2Insert[i]);
@@ -111,8 +115,8 @@ TEST_F(CircBufferTest, Retrieve3) {
 }
 
 TEST_F(CircBufferTest, Peek) {
-    int data2Insert[]{10,20};
-    for(auto data: data2Insert) {
+    int data2Insert[]{10, 20};
+    for (auto data: data2Insert) {
         emblib_circ_buffer_insert(&buffer, &data);
     }
 

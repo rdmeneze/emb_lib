@@ -17,7 +17,6 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_subdirectory(app)
 add_subdirectory(src)
 add_subdirectory(test)
 add_subdirectory(test/queue)

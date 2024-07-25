@@ -43,7 +43,7 @@ TEST(queue_test, queue_init_bufferlen_size_elem_compatible) {
     ASSERT_EQ(queue.head, 0);
     ASSERT_EQ(queue.tail, 0);
     ASSERT_EQ(queue.capacity, sizeof(buffer));
-    ASSERT_EQ(queue.size_elem, sizeof(uint8_t));
+    ASSERT_EQ(queue.elem_size, sizeof(uint8_t));
 }
 
 TEST(queue_test, queue_flush) {
