@@ -19,7 +19,8 @@ typedef emblib_circ_buffer_t emblib_queue_t; //!< emblib_queue_t declaration
  *  @param[in]      elem_size capacity of a unique element of the queue
  * @return     true on success, false on fail
  */
-bool emblib_queue_init(emblib_queue_t *queue, const void *array, const size_t buffer_len, const size_t size_elem);
+bool emblib_queue_init(emblib_queue_t *queue, const void *array, const size_t buffer_len, const size_t size_elem,
+                       void (*copy_fn)(void *dest, void *src), void (*free_fn)(void *data));
 
 /**
  * @brief Clears all elements from the queue.

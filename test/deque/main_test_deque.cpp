@@ -12,8 +12,18 @@ protected:
     emblib_deque_t deque;
     int deque_array[5];
 
+    static void int_copy(void *dest, void *src) {
+        if (dest && src) {
+            memcpy(dest, src, sizeof(int));
+        }
+    }
+
+    static void int_free(void *data) {
+        return;
+    }
+
     virtual void SetUp() {
-        emblib_deque_init(&deque, deque_array, sizeof(deque_array), sizeof(int));
+        emblib_deque_init(&deque, deque_array, sizeof(deque_array), sizeof(int), int_copy, int_free);
     }
 
     virtual void TearDown() {

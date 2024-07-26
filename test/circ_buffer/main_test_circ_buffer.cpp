@@ -13,8 +13,18 @@ protected:
     emblib_circ_buffer_t buffer;
     int buffer_array[5]{0};
 
+    static void int_copy(void *dest, void *src) {
+        if (dest && src) {
+            memcpy(dest, src, sizeof(int));
+        }
+    }
+
+    static void int_free(void *data) {
+        return;
+    }
+
     virtual void SetUp() {
-        emblib_circ_buffer_init(&buffer, buffer_array, sizeof(buffer_array), sizeof(int));
+        emblib_circ_buffer_init(&buffer, buffer_array, sizeof(buffer_array), sizeof(int), int_copy, int_free);
     }
 };
 

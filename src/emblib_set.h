@@ -6,7 +6,12 @@
 /**
  * @brief Alias for list structure to represent a set.
  */
-typedef emblib_list_t emblib_set_t;
+//typedef emblib_list_t emblib_set_t;
+typedef struct _emblib_set_t {
+    emblib_list_t list;
+
+    int (*cmp_fn)(void *right, void *left);
+} emblib_set_t;
 
 /**
  * @brief Initializes the set.
@@ -17,7 +22,9 @@ typedef emblib_list_t emblib_set_t;
  * @param size_elem Size of each element in bytes.
  * @return true if initialization is successful, false otherwise.
  */
-bool emblib_set_init(emblib_set_t *set, void *array, size_t buffer_len, size_t size_elem);
+bool emblib_set_init(emblib_set_t *set, void *array, size_t buffer_len, size_t size_elem,
+                     void (*copy_fn)(void *dest, void *src), void (*free_fn)(void *data),
+                     int (*cmp_fn)(void *right, void *left));
 
 /**
  * @brief Adds an element to the set.
@@ -69,5 +76,9 @@ size_t emblib_set_count(emblib_set_t *set);
  * @param set Pointer to the set structure.
  */
 void emblib_set_flush(emblib_set_t *set);
+
+bool emblib_set_is_full(emblib_set_t *set);
+
+bool emblib_set_is_empty(emblib_set_t *set);
 
 #endif //__EMB_LIB_EMBLIB_SET_H__

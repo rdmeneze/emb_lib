@@ -7,13 +7,35 @@ extern "C" {
 
 #include "gtest/gtest.h"
 #include <sstream>
+#include <string.h>
+
+void int_copy(void *dest, void *src) {
+    if (dest && src) {
+        memcpy(dest, src, sizeof(int));
+    }
+}
+
+void int_free(void *data) {
+    return;
+}
+
+int int_cmp(void *left, void *right) {
+    if (left && right) {
+        int l = *(int *) left;
+        int r = *(int *) right;
+        return r - l;
+    }
+
+    return 1;
+}
+
 
 TEST(SetTest, Initialization) {
     emblib_set_t set;
     int array[10];
-    ASSERT_TRUE(emblib_set_init(&set, array, sizeof(array), sizeof(int)));
-    ASSERT_TRUE(emblib_list_is_empty(&set));
-    ASSERT_FALSE(emblib_list_is_full(&set));
+    ASSERT_TRUE(emblib_set_init(&set, array, sizeof(array), sizeof(int), int_copy, int_free, int_cmp));
+    ASSERT_TRUE(emblib_set_is_empty(&set));
+    ASSERT_FALSE(emblib_set_is_full(&set));
     ASSERT_EQ(emblib_set_size(&set), ARRAY_LEN(array));
     ASSERT_EQ(emblib_set_count(&set), 0);
 }
@@ -21,7 +43,7 @@ TEST(SetTest, Initialization) {
 TEST(SetTest, AddElement) {
     emblib_set_t set;
     int array[10];
-    emblib_set_init(&set, array, sizeof(array), sizeof(int));
+    emblib_set_init(&set, array, sizeof(array), sizeof(int), int_copy, int_free, int_cmp);
 
     int elem = 42;
     ASSERT_TRUE(emblib_set_add(&set, &elem));
@@ -36,7 +58,7 @@ TEST(SetTest, AddElement) {
 TEST(SetTest, RemoveElement) {
     emblib_set_t set;
     int array[10];
-    emblib_set_init(&set, array, sizeof(array), sizeof(int));
+    emblib_set_init(&set, array, sizeof(array), sizeof(int), int_copy, int_free, int_cmp);
 
     int elem = 42;
     emblib_set_add(&set, &elem);
@@ -52,7 +74,7 @@ TEST(SetTest, RemoveElement) {
 TEST(SetTest, ClearSet) {
     emblib_set_t set;
     int array[10];
-    emblib_set_init(&set, array, sizeof(array), sizeof(int));
+    emblib_set_init(&set, array, sizeof(array), sizeof(int), int_copy, int_free, int_cmp);
 
     int elem1 = 42;
     int elem2 = 43;

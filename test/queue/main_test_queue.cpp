@@ -8,49 +8,59 @@ extern "C" {
 #include "gtest/gtest.h"
 #include <sstream>
 
+static void int_copy(void *dest, void *src) {
+    if (dest && src) {
+        memcpy(dest, src, sizeof(int));
+    }
+}
+
+static void int_free(void *data) {
+    return;
+}
+
 TEST(queue_test, foo_test) {
     ASSERT_EQ(true, true);
 }
 
 TEST(queue_test, queue_init_queue_null) {
     emblib_queue_t *queue = NULL;
-    uint8_t buffer[16] = {0};
+    int buffer[16] = {0};
 
-    bool ret = emblib_queue_init(queue, buffer, sizeof(buffer), sizeof(uint8_t));
+    bool ret = emblib_queue_init(queue, buffer, sizeof(buffer), sizeof(buffer[0]), int_copy, int_free);
     ASSERT_EQ(ret, false);
 }
 
 TEST(queue_test, queue_init_buffer_null) {
     emblib_queue_t queue;
 
-    bool ret = emblib_queue_init(&queue, NULL, sizeof(uint8_t), sizeof(uint8_t));
+    bool ret = emblib_queue_init(&queue, NULL, sizeof(uint8_t), sizeof(int), int_copy, int_free);
     ASSERT_EQ(ret, false);
 }
 
 TEST(queue_test, queue_init_bufferlen_size_elem_incompatible) {
     emblib_queue_t queue;
-    uint8_t buffer[16];
+    int buffer[16];
 
-    bool ret = emblib_queue_init(&queue, buffer, sizeof(buffer), 3);
+    bool ret = emblib_queue_init(&queue, buffer, sizeof(buffer), 3, int_copy, int_free);
     ASSERT_EQ(ret, false);
 }
 
 TEST(queue_test, queue_init_bufferlen_size_elem_compatible) {
     emblib_queue_t queue;
-    uint8_t buffer[16];
+    int buffer[16];
 
-    ASSERT_TRUE(emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(uint8_t)));
+    ASSERT_TRUE(emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(buffer[0]), int_copy, int_free));
     ASSERT_EQ(queue.head, 0);
     ASSERT_EQ(queue.tail, 0);
     ASSERT_EQ(queue.capacity, sizeof(buffer));
-    ASSERT_EQ(queue.elem_size, sizeof(uint8_t));
+    ASSERT_EQ(queue.elem_size, sizeof(int));
 }
 
 TEST(queue_test, queue_flush) {
     emblib_queue_t queue;
-    uint8_t buffer[16];
+    int buffer[16];
 
-    ASSERT_TRUE(emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(uint8_t)));
+    ASSERT_TRUE(emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(buffer[0]), int_copy, int_free));
     emblib_queue_flush(&queue);
     ASSERT_EQ(queue.head, 0);
     ASSERT_EQ(queue.tail, 0);
@@ -59,20 +69,20 @@ TEST(queue_test, queue_flush) {
 
 TEST(queue_test, queue_size) {
     emblib_queue_t queue;
-    uint8_t buffer[16];
+    int buffer[16];
 
-    ASSERT_TRUE(emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(uint16_t)));
-    ASSERT_EQ(emblib_queue_size(&queue), sizeof(buffer) / sizeof(uint16_t));
+    ASSERT_TRUE(emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(buffer[0]), int_copy, int_free));
+    ASSERT_EQ(emblib_queue_size(&queue), ARRAY_LEN(buffer));
 }
 
 TEST(queue_test, queue_enqueue) {
     emblib_queue_t queue;
-    uint16_t buffer[8];
-    uint16_t data = 100;
+    int buffer[8];
+    int data = 100;
 
-    bool ret = emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(uint16_t));
+    bool ret = emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(buffer[0]), int_copy, int_free);
     ASSERT_TRUE(ret);
-    ASSERT_EQ(emblib_queue_size(&queue), sizeof(buffer) / sizeof(uint16_t));
+    ASSERT_EQ(emblib_queue_size(&queue), ARRAY_LEN(buffer));
 
     ASSERT_TRUE(emblib_queue_enqueue(&queue, &data));
     ASSERT_EQ(emblib_queue_count(&queue), 1);
@@ -80,12 +90,12 @@ TEST(queue_test, queue_enqueue) {
 
 TEST(queue_test, queue_enqueue_is_not_empty) {
     emblib_queue_t queue;
-    uint16_t buffer[16];
-    uint16_t data = 100;
+    int buffer[16];
+    int data = 100;
 
-    bool ret = emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(uint16_t));
+    bool ret = emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(buffer[0]), int_copy, int_free);
     ASSERT_TRUE(ret);
-    ASSERT_EQ(emblib_queue_size(&queue), sizeof(buffer) / sizeof(uint16_t));
+    ASSERT_EQ(emblib_queue_size(&queue), ARRAY_LEN(buffer));
 
     ASSERT_TRUE(emblib_queue_enqueue(&queue, &data));
     ASSERT_EQ(emblib_queue_count(&queue), 1);
@@ -94,12 +104,12 @@ TEST(queue_test, queue_enqueue_is_not_empty) {
 
 TEST(queue_test, queue_enqueue_is_full) {
     emblib_queue_t queue;
-    uint16_t buffer[2];
-    uint16_t data[sizeof(buffer) / sizeof(uint16_t)] = {100, 200};
+    int buffer[2];
+    int data[]{100, 200};
 
-    bool ret = emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(uint16_t));
+    bool ret = emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(buffer[0]), int_copy, int_free);
     ASSERT_TRUE(ret);
-    ASSERT_EQ(emblib_queue_size(&queue), sizeof(buffer) / sizeof(uint16_t));
+    ASSERT_EQ(emblib_queue_size(&queue), ARRAY_LEN(buffer));
 
     for (int i = 0; i < emblib_queue_size(&queue); i++) {
         ASSERT_TRUE(emblib_queue_enqueue(&queue, &data[i]));
@@ -112,12 +122,12 @@ TEST(queue_test, queue_enqueue_is_full) {
 
 TEST(queue_test, queue_enqueue_full) {
     emblib_queue_t queue;
-    uint16_t buffer[2];
-    uint16_t data[3] = {100, 200, 300};
+    int buffer[2];
+    int data[3] = {100, 200, 300};
 
-    bool ret = emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(uint16_t));
+    bool ret = emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(buffer[0]), int_copy, int_free);
     ASSERT_TRUE(ret);
-    ASSERT_EQ(emblib_queue_size(&queue), sizeof(buffer) / sizeof(uint16_t));
+    ASSERT_EQ(emblib_queue_size(&queue), ARRAY_LEN(buffer));
 
     for (int i = 0; i < 2; i++) {
         ASSERT_TRUE(emblib_queue_enqueue(&queue, &data[i]));
@@ -130,10 +140,10 @@ TEST(queue_test, queue_enqueue_full) {
 
 TEST(queue_test, dequeue) {
     emblib_queue_t queue;
-    uint16_t buffer[3];
-    uint16_t data = 10;
+    int buffer[3];
+    int data = 10;
 
-    emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(uint16_t));
+    emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(buffer[0]), int_copy, int_free);
 
     emblib_queue_enqueue(&queue, &data);
     int retrieved_data;
@@ -146,10 +156,10 @@ TEST(queue_test, dequeue) {
 
 TEST(queue_test, peek) {
     emblib_queue_t queue;
-    uint16_t buffer[3];
-    uint16_t data = 10;
+    int buffer[3];
+    int data = 10;
 
-    emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(uint16_t));
+    emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(buffer[0]), int_copy, int_free);
 
     emblib_queue_enqueue(&queue, &data);
     int peeked_data;
@@ -160,10 +170,10 @@ TEST(queue_test, peek) {
 
 TEST(queue_test, is_empty) {
     emblib_queue_t queue;
-    uint16_t buffer[3];
-    uint16_t data = 10;
+    int buffer[3];
+    int data = 10;
 
-    emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(uint16_t));
+    emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(buffer[0]), int_copy, int_free);
 
     EXPECT_TRUE(emblib_queue_is_empty(&queue));
     emblib_queue_enqueue(&queue, &data);
@@ -172,10 +182,10 @@ TEST(queue_test, is_empty) {
 
 TEST(queue_test, is_full) {
     emblib_queue_t queue;
-    uint16_t buffer[3];
-    uint16_t data = 10;
+    int buffer[3];
+    int data = 10;
 
-    emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(uint16_t));
+    emblib_queue_init(&queue, buffer, sizeof(buffer), sizeof(buffer[0]), int_copy, int_free);
 
     EXPECT_FALSE(emblib_queue_is_full(&queue));
     for (int i = 0; i < 3; i++) {

@@ -1,8 +1,9 @@
 #include "emblib_list.h"
 #include <string.h>
 
-bool emblib_list_init(emblib_list_t *list, void *array, size_t buffer_len, size_t size_elem) {
-    return emblib_circ_buffer_init(list, array, buffer_len, size_elem);
+bool emblib_list_init(emblib_list_t *list, void *array, size_t buffer_len, size_t size_elem,
+                      void (*copy_fn)(void *dest, void *src), void (*free_fn)(void *data)) {
+    return emblib_circ_buffer_init(list, array, buffer_len, size_elem, copy_fn, free_fn);
 }
 
 void emblib_list_flush(emblib_list_t *list) {
@@ -22,7 +23,7 @@ bool emblib_list_insert(emblib_list_t *list, size_t index, void *data) {
         memmove(dest, src, move_count * list->elem_size);
     }
 
-    memcpy((char *) list->array + insert_pos * list->elem_size, data, list->elem_size);
+    list->copy_fn((char *) list->array + insert_pos * list->elem_size, data);
     list->tail = (list->tail + 1) % size;
     list->count++;
     return true;
@@ -34,7 +35,7 @@ bool emblib_list_remove(emblib_list_t *list, size_t index, void *data) {
     const size_t size = emblib_list_size(list);
 
     const size_t remove_pos = (list->head + index) % size;
-    memcpy(data, (char *) list->array + remove_pos * list->elem_size, list->elem_size);
+    list->copy_fn(data, (char *) list->array + remove_pos * list->elem_size);
 
     size_t move_count = list->count - index - 1;
     void *src = (char *) list->array + ((remove_pos + 1) % size) * list->elem_size;
@@ -55,7 +56,7 @@ bool emblib_list_get(emblib_list_t *list, size_t index, void *data) {
     const size_t size = emblib_list_size(list);
 
     const size_t pos = (list->head + index) % size;
-    memcpy(data, (char *) list->array + pos * list->elem_size, list->elem_size);
+    list->copy_fn(data, (char *) list->array + pos * list->elem_size);
     return true;
 }
 
