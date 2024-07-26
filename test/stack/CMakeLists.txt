@@ -11,6 +11,9 @@ target_compile_options(main_test_stack PRIVATE -std=gnu++17)
 
 target_link_libraries(main_test_stack PRIVATE gtest gtest_main src_lib)
 
+include(GoogleTest)
+gtest_discover_tests(main_test_stack)
+
 enable_testing()
 
 add_test(NAME main_test_stack COMMAND main_test_stack)

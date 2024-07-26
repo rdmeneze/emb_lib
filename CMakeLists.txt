@@ -25,6 +25,7 @@ add_subdirectory(test/circ_buffer)
 add_subdirectory(test/stack)
 add_subdirectory(test/deque)
 add_subdirectory(test/list)
+add_subdirectory(test/set)
 
 message(STATUS "Including directory: ${CMAKE_SOURCE_DIR}/src")
 
