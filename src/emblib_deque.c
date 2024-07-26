@@ -2,8 +2,9 @@
 #include "emblib_circ_buffer.h"
 #include <string.h>
 
-bool emblib_deque_init(emblib_deque_t *deque, void *array, size_t buffer_len, size_t size_elem) {
-    return emblib_circ_buffer_init(deque, array, buffer_len, size_elem);
+bool emblib_deque_init(emblib_deque_t *deque, void *array, size_t buffer_len, size_t size_elem,
+                       void (*copy_fn)(void *dest, void *src), void (*free_fn)(void *data)) {
+    return emblib_circ_buffer_init(deque, array, buffer_len, size_elem, copy_fn, free_fn);
 }
 
 void emblib_deque_flush(emblib_deque_t *deque) {
@@ -15,7 +16,7 @@ bool emblib_deque_push_front(emblib_deque_t *deque, void *data) {
     if (!emblib_deque_is_full(deque)) {
         const size_t size = emblib_deque_size(deque);
         deque->head = (deque->head - 1 + size) % size;
-        memcpy((char *) deque->array + deque->head * deque->elem_size, data, deque->elem_size);
+        deque->copy_fn((char *) deque->array + deque->head * deque->elem_size, data);
         deque->count++;
 
         bRet = true;

@@ -19,7 +19,8 @@ typedef emblib_circ_buffer_t emblib_list_t;
  * @param[in] size_elem Size of each element in bytes.
  * @return true if initialization is successful, false otherwise.
  */
-bool emblib_list_init(emblib_list_t *list, void *array, size_t buffer_len, size_t size_elem);
+bool emblib_list_init(emblib_list_t *list, void *array, size_t buffer_len, size_t size_elem,
+                      void (*copy_fn)(void *dest, void *src), void (*free_fn)(void *data));
 
 /**
  * @brief Clears all elements from the list.

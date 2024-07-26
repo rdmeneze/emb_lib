@@ -21,7 +21,8 @@ typedef emblib_circ_buffer_t emblib_stack_t;
  *  @returns        true on success
  *  @returns        false on fail
  */
-bool emblib_stack_init(emblib_stack_t *stack, const void *array, const size_t buffer_len, const size_t size_elem);
+bool emblib_stack_init(emblib_stack_t *stack, const void *array, const size_t buffer_len, const size_t size_elem,
+                       void (copy_fn)(void *dest, void *src), void (free_fn)(void *data));
 
 /**
  *  @brief          return the stack capacity in elem_size units

@@ -19,6 +19,8 @@ typedef struct emblib_circ_buffer_t {
     size_t head;        //!< head element of the circ_buffer
     size_t tail;        //!< tail element of the circ_buffer
     size_t elem_size;   //!< size of each element
+    void (*copy_fn)(void *dest, void *src); //! copy function
+    void (*free_fn)(void *data);      //! free function
 } emblib_circ_buffer_t;
 
 /**
@@ -27,7 +29,8 @@ typedef struct emblib_circ_buffer_t {
  * @returns  true on success, false other else
  */
 bool emblib_circ_buffer_init(emblib_circ_buffer_t *circ_buffer, const void *array, const size_t buffer_len,
-                             const size_t size_elem);
+                             const size_t size_elem, void (*copy_fn)(void *dest, void *src),
+                             void (*free_fn)(void *data));
 
 /**
  * @brief   size in elements of circ_buffer

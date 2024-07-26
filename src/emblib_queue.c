@@ -1,8 +1,9 @@
 #include "emblib_queue.h"
 #include <assert.h>
 
-bool emblib_queue_init(emblib_queue_t *queue, const void *array, const size_t buffer_len, const size_t size_elem) {
-    return emblib_circ_buffer_init((emblib_circ_buffer_t *) queue, array, buffer_len, size_elem);
+bool emblib_queue_init(emblib_queue_t *queue, const void *array, const size_t buffer_len, const size_t size_elem,
+                       void (*copy_fn)(void *dest, void *src), void (*free_fn)(void *data)) {
+    return emblib_circ_buffer_init((emblib_circ_buffer_t *) queue, array, buffer_len, size_elem, copy_fn, free_fn);
 }
 
 void emblib_queue_flush(emblib_queue_t *queue) {

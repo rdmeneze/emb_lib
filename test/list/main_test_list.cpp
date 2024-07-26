@@ -11,7 +11,17 @@ class ListTest : public ::testing::Test {
 protected:
     void SetUp() override {
         // Inicializa a lista e um buffer de dados
-        emblib_list_init(&list, buffer, sizeof(buffer), sizeof(buffer[0]));
+        emblib_list_init(&list, buffer, sizeof(buffer), sizeof(buffer[0]), int_copy, int_free);
+    }
+
+    static void int_copy(void *dest, void *src) {
+        if (dest && src) {
+            memcpy(dest, src, sizeof(int));
+        }
+    }
+
+    static void int_free(void *data) {
+        return;
     }
 
     // Dados de teste
