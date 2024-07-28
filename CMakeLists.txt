@@ -18,6 +18,7 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 add_subdirectory(src)
+add_subdirectory(modules)
 add_subdirectory(test)
 add_subdirectory(test/queue)
 add_subdirectory(test/util)
@@ -26,6 +27,7 @@ add_subdirectory(test/stack)
 add_subdirectory(test/deque)
 add_subdirectory(test/list)
 add_subdirectory(test/set)
+add_subdirectory(test/string_builder)
 
 message(STATUS "Including directory: ${CMAKE_SOURCE_DIR}/src")
 
