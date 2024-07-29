@@ -82,6 +82,18 @@ bool sb_append_int(string_builder_t *sb, int val) {
     return bRet;
 }
 
+bool sb_append_long_long(string_builder_t *sb, long long val) {
+    bool bRet = false;
+
+    if (sb) {
+        char val_str[16];
+        const uint8_t len = sprintf(val_str, "%ll", val);
+        bRet = sb_append_char_array(sb, val_str, len);
+    }
+
+    return bRet;
+}
+
 bool sb_append_byte(string_builder_t *sb, uint8_t val) {
     return sb ? sb_append_char_array(sb, &val, 1) : false;
 }
