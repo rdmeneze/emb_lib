@@ -21,6 +21,8 @@ const char *sb_str(const string_builder_t *sb);
 
 bool sb_append_char_array(string_builder_t *sb, const char *buffer, const size_t len);
 
+bool sb_append_char_array_at(string_builder_t *sb, const size_t position, const char *buffer, const size_t len);
+
 bool sb_append_int(string_builder_t *sb, int val);
 
 bool sb_append_byte(string_builder_t *sb, uint8_t val);

@@ -82,6 +82,39 @@ TEST(string_builder_test, append_byte) {
     ASSERT_EQ(memcmp(sb_str(&sb), buffer, sizeof(buffer)), 0);
 }
 
+TEST(string_builder_test, append_char_array_at) {
+    string_builder_t sb;
+    const std::string startStr{"START -"};
+    const std::string endStr{"- END"};
+    const std::string middleStr{" MIDDLE "};
+    char s[128];
+    sb_init(&sb, s, sizeof(s));
+    sb_append_char_array(&sb, startStr.c_str(), startStr.length());
+    sb_append_char_array(&sb, endStr.c_str(), endStr.length());
+
+    ASSERT_TRUE(sb_append_char_array_at(&sb, startStr.length(), middleStr.c_str(), middleStr.length()));
+    std::ostringstream oss;
+    oss << startStr << middleStr << endStr;
+    ASSERT_STREQ(sb_str(&sb), oss.str().c_str());
+}
+
+TEST(string_builder_test, append_char_array_at_end) {
+    string_builder_t sb;
+    const std::string startStr{"START -"};
+    const std::string endStr{"- END"};
+    const std::string middleStr{" MIDDLE "};
+
+    char s[128];
+    std::fill(std::begin(s), std::end(s), 0x55);
+    sb_init(&sb, (char *) s, sizeof(s));
+    sb_append_char_array(&sb, startStr.c_str(), startStr.length());
+    sb_append_char_array(&sb, middleStr.c_str(), middleStr.length());
+
+    ASSERT_TRUE(sb_append_char_array_at(&sb, startStr.length() + middleStr.length(), endStr.c_str(), endStr.length()));
+    std::ostringstream oss;
+    oss << startStr << middleStr << endStr;
+    ASSERT_STREQ(sb_str(&sb), oss.str().c_str());
+}
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
