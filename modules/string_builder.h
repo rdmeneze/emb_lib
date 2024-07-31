@@ -6,9 +6,9 @@
 #include <stdint.h>
 
 typedef struct _string_builder_t {
+    char *s;
     size_t len;
     size_t capacity;
-    char *s;
 } string_builder_t;
 
 bool sb_init(string_builder_t *sb, const char *s, const size_t size);
