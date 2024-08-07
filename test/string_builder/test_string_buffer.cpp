@@ -1,9 +1,9 @@
-extern "C" {
+extern "C"
+{
 #include <stdio.h>
 #include <inttypes.h>
-#include "../modules/string_builder.h"
+#include "../../modules/string_builder.h"
 #include "../../src/emblib_util.h"
-
 }
 
 #include "gtest/gtest.h"
@@ -120,4 +120,3 @@ int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
-
