@@ -1,0 +1,181 @@
+# CMakeLists.txt modificado para suportar thread safety
+
+cmake_minimum_required(VERSION 3.28)
+
+project(emb_lib C CXX)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS ON)
+set(CMAKE_C_STANDARD 17)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+
+# =============================================================================
+# OPÇÕES DE THREAD SAFETY
+# =============================================================================
+
+option(EMBLIB_THREAD_SAFETY "Enable thread safety support" OFF)
+option(EMBLIB_LOCK_FREE "Enable lock-free algorithms" OFF)
+option(EMBLIB_READER_WRITER "Enable reader-writer locks" OFF)
+
+set(EMBLIB_THREAD_BACKEND "PTHREAD" CACHE STRING "Thread backend (PTHREAD/FREERTOS/WINDOWS)")
+set_property(CACHE EMBLIB_THREAD_BACKEND PROPERTY STRINGS "PTHREAD;FREERTOS;WINDOWS;NONE")
+
+# =============================================================================
+# CONFIGURAÇÕES DE THREAD SAFETY
+# =============================================================================
+
+if(EMBLIB_THREAD_SAFETY)
+    message(STATUS "Thread safety enabled with backend: ${EMBLIB_THREAD_BACKEND}")
+
+    # Configurações específicas por backend
+    if(EMBLIB_THREAD_BACKEND STREQUAL "PTHREAD")
+        find_package(Threads REQUIRED)
+        add_compile_definitions(USE_PTHREAD)
+        set(THREAD_LIBRARIES Threads::Threads)
+
+    elseif(EMBLIB_THREAD_BACKEND STREQUAL "FREERTOS")
+        add_compile_definitions(USE_FREERTOS)
+        # Adicionar paths do FreeRTOS aqui
+        # set(FREERTOS_PATH "/path/to/freertos")
+        # include_directories(${FREERTOS_PATH}/include)
+
+    elseif(EMBLIB_THREAD_BACKEND STREQUAL "WINDOWS")
+        add_compile_definitions(USE_WINDOWS)
+        # Windows já tem as bibliotecas necessárias
+
+    endif()
+
+    # Opções adicionais
+    if(EMBLIB_LOCK_FREE)
+        add_compile_definitions(USE_ATOMICS)
+        message(STATUS "Lock-free algorithms enabled")
+    endif()
+
+    if(EMBLIB_READER_WRITER)
+        add_compile_definitions(USE_RWLOCK)
+        message(STATUS "Reader-writer locks enabled")
+    endif()
+
+else()
+    message(STATUS "Thread safety disabled")
+endif()
+
+# =============================================================================
+# DEPENDÊNCIAS EXISTENTES
+# =============================================================================
+
+include(FetchContent)
+
+FetchContent_Declare(
+        googletest
+        URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip
+)
+
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+
+enable_testing()
+
+# =============================================================================
+# BIBLIOTECAS PRINCIPAIS
+# =============================================================================
+
+add_subdirectory(src)
+add_subdirectory(modules)
+
+# Biblioteca thread-safe opcional
+if(EMBLIB_THREAD_SAFETY)
+    add_subdirectory(src_threadsafe)
+endif()
+
+# =============================================================================
+# TESTES
+# =============================================================================
+
+add_subdirectory(test)
+add_subdirectory(test/queue)
+add_subdirectory(test/util)
+add_subdirectory(test/circ_buffer)
+add_subdirectory(test/stack)
+add_subdirectory(test/deque)
+add_subdirectory(test/list)
+add_subdirectory(test/set)
+add_subdirectory(test/string_builder)
+
+# Testes thread-safe
+if(EMBLIB_THREAD_SAFETY)
+    add_subdirectory(test/thread_safety)
+endif()
+
+message(STATUS "Including directory: ${CMAKE_SOURCE_DIR}/src")
+
+# =============================================================================
+# CONFIGURAÇÕES DE COMPILAÇÃO
+# =============================================================================
+
+# Flags para thread safety
+if(EMBLIB_THREAD_SAFETY)
+    if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
+        add_compile_options(-pthread)
+    endif()
+endif()
+
+# Flags para otimização em sistemas embarcados
+if(EMBLIB_EMBEDDED_TARGET)
+    add_compile_options(-Os -ffunction-sections -fdata-sections)
+    add_link_options(-Wl,--gc-sections)
+endif()
+
+# =============================================================================
+# TARGETS DE CONVENIÊNCIA
+# =============================================================================
+
+# Target para compilar versão thread-safe
+if(EMBLIB_THREAD_SAFETY)
+    add_custom_target(threadsafe
+        COMMENT "Building thread-safe version"
+        DEPENDS src_lib_threadsafe
+    )
+endif()
+
+# Target para executar todos os testes
+add_custom_target(test_all
+    COMMAND ${CMAKE_CTEST_COMMAND} --verbose
+    COMMENT "Running all tests"
+    DEPENDS
+        main_test_queue
+        main_test_stack
+        main_test_circ_buffer
+        main_test_deque
+        main_test_list
+        main_test_set
+        main_test_util
+        main_test_string_builder
+)
+
+# Target para executar testes de thread safety
+if(EMBLIB_THREAD_SAFETY)
+    add_custom_target(test_threadsafe
+        COMMAND ${CMAKE_CTEST_COMMAND} --verbose -R "threadsafe"
+        COMMENT "Running thread safety tests"
+        DEPENDS main_test_threadsafe
+    )
+endif()
+
+# =============================================================================
+# INFORMAÇÕES DE BUILD
+# =============================================================================
+
+message(STATUS "=== emb_lib Build Configuration ===")
+message(STATUS "Thread Safety: ${EMBLIB_THREAD_SAFETY}")
+if(EMBLIB_THREAD_SAFETY)
+    message(STATUS "Thread Backend: ${EMBLIB_THREAD_BACKEND}")
+    message(STATUS "Lock-Free: ${EMBLIB_LOCK_FREE}")
+    message(STATUS "Reader-Writer: ${EMBLIB_READER_WRITER}")
+endif()
+message(STATUS "C Standard: ${CMAKE_C_STANDARD}")
+message(STATUS "CXX Standard: ${CMAKE_CXX_STANDARD}")
+message(STATUS "=====================================")
+
+#target_compile_options(main_test_queue PRIVATE -std=gnu++17)
