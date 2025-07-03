@@ -1,13 +1,196 @@
-CMakeFiles/*
+# =============================================================================
+# CMAKE BUILD ARTIFACTS
+# =============================================================================
+
+# CMake generated files
+CMakeFiles/
 cmake_install.cmake
 CMakeCache.txt
 Makefile
-list_ut
-./build
-main
-/*build*/*
+*.cmake
+CTestTestfile.cmake
+compile_commands.json
+
+# Build directories
+build/
+*build*/
+cmake-build-*/
+out/
+
+# CMake dependencies
+_deps/
+.cmake/
+
+# Testing artifacts
+Testing/
+CTestTestfile.cmake
+
+# Generated libraries and binaries
+lib/
+bin/
+*.a
+*.so
+*.dll
+*.dylib
+*.exe
+
+# =============================================================================
+# COMPILER ARTIFACTS
+# =============================================================================
+
+# Object files
 *.o
-_deps/*
-.cmake/*
-Testing/*
-lib/*
+*.obj
+*.lo
+*.slo
+
+# Compiled executables
+main
+list_ut
+main_test_*
+
+# Debug symbols
+*.dSYM/
+*.pdb
+
+# =============================================================================
+# IDE AND EDITOR FILES
+# =============================================================================
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# CLion
+.idea/
+cmake-build-*/
+
+# Visual Studio
+.vs/
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
+*.suo
+*.user
+
+# Eclipse CDT
+.cproject
+.project
+.settings/
+
+# Qt Creator
+*.pro.user
+*.pro.user.*
+
+# Xcode
+*.xcodeproj/
+*.xcworkspace/
+
+# =============================================================================
+# SYSTEM FILES
+# =============================================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+
+# =============================================================================
+# TEMPORARY AND BACKUP FILES
+# =============================================================================
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Backup files
+*.bak
+*.backup
+*.orig
+*_original.*
+
+# Log files
+*.log
+
+# =============================================================================
+# THREAD SAFETY DEVELOPMENT ARTIFACTS
+# =============================================================================
+
+# Temporary thread safety files (development only)
+*_threadsafe_temp.*
+*_atomic_temp.*
+thread_safety_experiments/
+
+# Performance benchmark results
+benchmarks/*.csv
+benchmarks/*.json
+performance_results/
+
+# Valgrind/sanitizer outputs
+valgrind-*.log
+*.gcda
+*.gcno
+*.gcov
+
+# =============================================================================
+# PACKAGE MANAGER ARTIFACTS
+# =============================================================================
+
+# Conan
+conandata.yml
+conaninfo.txt
+conanbuildinfo.*
+
+# vcpkg
+vcpkg_installed/
+
+# =============================================================================
+# DOCUMENTATION BUILD ARTIFACTS
+# =============================================================================
+
+# Doxygen
+docs/html/
+docs/latex/
+docs/man/
+docs/rtf/
+docs/xml/
+Doxyfile.bak
+
+# Sphinx
+docs/_build/
+docs/_static/
+docs/_templates/
+
+# =============================================================================
+# PLATFORM-SPECIFIC IGNORE PATTERNS
+# =============================================================================
+
+# ARM/Embedded toolchain artifacts
+*.elf
+*.hex
+*.bin
+*.map
+*.lst
+
+# GCC/Clang artifacts
+*.d
+*.dep
+
+# MSVC artifacts
+*.ilk
+*.pch
+*.idb
