@@ -4,8 +4,7 @@
  *  @date   dez-2018
  */
 
-#ifndef __EMBLIB_CIRC_BUFFER_H__
-#define __EMBLIB_CIRC_BUFFER_H__
+#pragma once
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -114,5 +113,4 @@ bool emblib_circ_buffer_will_full(emblib_circ_buffer_t *circ_buffer, const size_
  */
 void emblib_circ_buffer_flush(emblib_circ_buffer_t *circ_buffer);
 
-#endif    /* EMBLIB_CIRC_BUFFER_H */
 
