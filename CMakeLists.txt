@@ -101,6 +101,8 @@ add_subdirectory(test/deque)
 add_subdirectory(test/list)
 add_subdirectory(test/set)
 add_subdirectory(test/string_builder)
+add_subdirectory(test/assert)
+add_subdirectory(test/crash_record)
 
 # Experimental thread safety implementations
 if(EMBLIB_EXPERIMENTAL)
