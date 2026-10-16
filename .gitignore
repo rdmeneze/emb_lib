@@ -13,7 +13,7 @@ compile_commands.json
 
 # Build directories
 build/
-*build*/
+/build*/
 cmake-build-*/
 out/
 
@@ -48,6 +48,7 @@ bin/
 main
 list_ut
 main_test_*
+!main_test_*.cpp
 
 # Debug symbols
 *.dSYM/
