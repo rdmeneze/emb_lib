@@ -18,11 +18,11 @@ uint16_t LOWORD(const uint32_t b) {
 }
 
 uint16_t MAKEWORD(const uint8_t lo, const uint8_t hi) {
-    return ((hi << 8) | lo);
+    return (uint16_t) (((uint16_t) hi << 8) | lo);
 }
 
 uint32_t MAKEDWORD(const uint16_t lo, const uint16_t hi) {
-    return ((hi << 16) | lo);
+    return ((uint32_t) hi << 16) | lo;
 }
 
 uint8_t *memrev(uint8_t *p, const size_t len) {

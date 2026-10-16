@@ -185,7 +185,7 @@ TEST(stack_test, stack_peek_str) {
 
     data.len = strlen(data.s);
 
-    emblib_stack_init(&stack, buffer, sizeof(buffer), sizeof(uint16_t), string_copy, string_free);
+    emblib_stack_init(&stack, buffer, sizeof(buffer), sizeof(string_t), string_copy, string_free);
 
     emblib_stack_push(&stack, &data);
     string_t peeked_data;
@@ -194,6 +194,8 @@ TEST(stack_test, stack_peek_str) {
     EXPECT_EQ(peeked_data.len, data.len);
     EXPECT_EQ(emblib_stack_count(&stack), 1);
 
+    // peek hands back a deep copy owned by the caller
+    string_free(&peeked_data);
     emblib_stack_flush(&stack);
 }
 
